@@ -1,0 +1,42 @@
+
+img#plugin__qc__icon {
+    background: #fff url(../../images/throbber.gif) center center no-repeat;
+    float: right;
+}
+
+div#plugin__qc__out {
+    font-size: 90%;
+    background-color: __background_neu__;
+    text: __text_neu__;
+    border: 1px solid __border__;
+    padding: 1em;
+    margin: 1em;
+    width: 80%;
+}
+
+div#plugin__qc__out div {
+    margin-left: 1em;
+}
+
+div#plugin__qc__out p {
+    margin-left: 1em;
+}
+
+div#plugin__qc__out h1,
+div#plugin__qc__out h2,
+div#plugin__qc__out h3,
+div#plugin__qc__out h4,
+div#plugin__qc__out h5 {
+    margin: 0;
+    border: none;
+}
+
+div#plugin__qc__out h2 {
+    font-weight: bold;
+    font-size: 1.3em;
+    margin-bottom: 0.5em;
+}
+
+div#plugin__qc__out h3 {
+    font-size: 1em;
+}

@@ -30,6 +30,8 @@ class renderer_plugin_qc extends Doku_Renderer {
         'chars'         => 0,
         'words'         => 0,
 
+        'score'         => 0,
+
         // calculated error scores
         'err' => array(
             'fixme'      => 0,
@@ -117,6 +119,9 @@ class renderer_plugin_qc extends Doku_Renderer {
         if(count($this->doc['authors']) == 1){
             $this->doc['err']['singleauthor'] = 1;
         }
+
+        // add up all scores
+        foreach($this->doc['err'] as $err => $val) $this->doc['score'] += $val;
 
 
         //we're done here

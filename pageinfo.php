@@ -14,10 +14,6 @@ if(auth_quickaclcheck($ID) < AUTH_READ) die('Not authorized');
 $qc = plugin_load('helper','qc');
 $data = $qc->getQCData($ID);
 
-// calculate overall score
-$score = 0;
-foreach($data['err'] as $err => $val) $score += $val;
-
 // start output
 header('Content-Type: text/html; charset=utf-8');
 
@@ -31,9 +27,6 @@ echo '<dd>'.dformat($data['created']).'</dd>';
 echo '<dt>'.$qc->getLang('g_modified').'</dt>';
 echo '<dd>'.dformat($data['modified']).'</dd>';
 
-echo '<dt>'.$qc->getLang('g_changes').'</dt>';
-echo '<dd>'.$data['changes'].'</dd>';
-
 // print top 5 authors
 arsort($data['authors']);
 $top5 = array_slice($data['authors'],0,5);
@@ -43,7 +36,7 @@ echo '<dt>'.$qc->getLang('g_authors').'</dt>';
 echo '<dd>';
 foreach($top5 as $a => $e){
     if($a == '*'){
-        echo 'Anonymous';
+        echo $qc->getLang('anonymous');
     }else{
         echo editorinfo($a);
     }
@@ -51,6 +44,9 @@ foreach($top5 as $a => $e){
     if($i++ < $cnt) echo ', ';
 }
 echo '</dd>';
+
+echo '<dt>'.$qc->getLang('g_changes').'</dt>';
+echo '<dd>'.$data['changes'].'</dd>';
 
 echo '<dt>'.$qc->getLang('g_chars').'</dt>';
 echo '<dd>'.$data['chars'].'</dd>';
@@ -63,7 +59,7 @@ echo '</div>';
 
 
 // output all the problems
-if($score){
+if($data['score']){
     echo '<h2>'.$qc->getLang('errorsfound_h').'</h2>';
     echo '<p>'.$qc->getLang('errorsfound').'</p>';
     echo '<div>';

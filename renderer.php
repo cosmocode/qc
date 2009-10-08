@@ -22,6 +22,14 @@ class renderer_plugin_qc extends Doku_Renderer {
         'fixme'         => 0,
         'hr'            => 0,
 
+        'created'       => 0,
+        'modified'      => 0,
+        'changes'       => 0,
+        'authors'       => array(),
+
+        'chars'         => 0,
+        'words'         => 0,
+
         // calculated error scores
         'err' => array(
             'fixme'      => 0,
@@ -34,6 +42,34 @@ class renderer_plugin_qc extends Doku_Renderer {
     );
 
     var $quotelevel = 0;
+
+    function document_start() {
+        global $ID;
+        $meta = p_get_metadata($ID);
+
+        // get some dates from meta data
+        $this->doc['created']  = $meta['date']['created'];
+        $this->doc['modified'] = $meta['date']['modified'];
+
+        // get author info
+        $revs = getRevisions($ID,0,0);
+        array_push($revs,$meta['last_change']['date']);
+        $this->doc['changes'] = count($revs);
+        foreach($revs as $rev){
+            $info = getRevisionInfo($ID, $rev);
+            if($info['user']){
+                $this->doc['authors'][$info['user']] += 1;
+            }else{
+                $this->doc['authors']['*'] += 1;
+            }
+        }
+
+        // work on raw text
+        $text = rawWiki($ID);
+        $this->doc['chars'] = utf8_strlen($text);
+        $this->doc['words'] = count(preg_split('/[^\w\-_]/u',$text));
+    }
+
 
     /**
      * Here the score is calculated
@@ -76,6 +112,12 @@ class renderer_plugin_qc extends Doku_Renderer {
         if($this->doc['linebreak'] > 2){
             $this->doc['err']['manybr'] = $this->doc['linebreak'] - 2;
         }
+
+        // 1 point for single author only
+        if(count($this->doc['authors']) == 1){
+            $this->doc['err']['singleauthor'] = 1;
+        }
+
 
         //we're done here
         $this->doc = serialize($this->doc);

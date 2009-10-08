@@ -10,7 +10,6 @@ $ID   = cleanID($_REQUEST['id']);
 $qc = plugin_load('helper','qc');
 $data = $qc->getQCData($ID);
 
-
 $score = 0;
 foreach($data['err'] as $err => $val) $score += $val;
 

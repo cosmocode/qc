@@ -14,6 +14,13 @@ div#plugin__qc__out {
     width: 80%;
 }
 
+div#plugin__qc__out dl dt {
+    float: left;
+    width: 10em;
+    clear: left;
+}
+
+
 div#plugin__qc__out div {
     margin-left: 1em;
 }

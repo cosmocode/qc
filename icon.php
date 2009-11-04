@@ -11,7 +11,7 @@ $OPTS = array(
     'size'   => 10,
     'xpad'   => 6,
     'ypad'   => 2,
-    'crad'   => 3,
+    'crad'   => 2,
     'width'  => 600,
     'height' => 20,
 );
@@ -36,14 +36,16 @@ require_once(dirname(__FILE__).'/ColorGradient.class.php');
 $hgrad = new ColorGradient(array(0 => 'FF0000', 100 => '00FF00'), 0.0, 1.0, 'hsv');
 
 $c_score = $hgrad->getColorGD($pct/100,$img);
+list($r,$g,$b) = html2rgb($qc->getConf('color'));
+$c_text  = imagecolorallocate($img,$r,$g,$b);
 $c_black = imagecolorallocate($img,0,0,0);
 $c_red   = imagecolorallocate($img,255,0,0);
 $c_green = imagecolorallocate($img,0,255,0);
 
-list($x,$y) = textbox($img,0,2,$qc->getLang('i_qcscore'),$c_black);
+list($x,$y) = textbox($img,0,2,$qc->getLang('i_qcscore'),$c_text);
 list($x,$y) = textbox($img,$x+5,2,-1*$data['score'],$c_black,$c_score);
 
-list($x,$y) = textbox($img,$x+15,2,$qc->getLang('i_fixmes'),$c_black);
+list($x,$y) = textbox($img,$x+15,2,$qc->getLang('i_fixmes'),$c_text);
 list($x,$y) = textbox($img,$x+5,2,$data['fixme'],$c_black,(($data['fixme'])?$c_red:$c_green));
 
 
@@ -53,6 +55,28 @@ header('Content-Type: image/png');
 imagepng($img);
 imagedestroy($img);
 
+/**
+ * Convert a hex color to it's RGB values
+ *
+ * @link http://www.anyexample.com/programming/php/php_convert_rgb_from_to_html_hex_color.xml
+ */
+function html2rgb($color) {
+    if ($color[0] == '#')
+        $color = substr($color, 1);
+
+    if (strlen($color) == 6)
+        list($r, $g, $b) = array($color[0].$color[1],
+                                 $color[2].$color[3],
+                                 $color[4].$color[5]);
+    elseif (strlen($color) == 3)
+        list($r, $g, $b) = array($color[0].$color[0], $color[1].$color[1], $color[2].$color[2]);
+    else
+        return false;
+
+    $r = hexdec($r); $g = hexdec($g); $b = hexdec($b);
+
+    return array($r, $g, $b);
+}
 
 /**
  * Write some text to the image

@@ -5,6 +5,7 @@
 
 // must be run within Dokuwiki
 if (!defined('DOKU_INC')) die();
+require_once(DOKU_INC.'inc/plugin.php');
 
 class helper_plugin_qc extends DokuWiki_Plugin {
 

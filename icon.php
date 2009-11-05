@@ -33,7 +33,7 @@ imagefill($img, 0, 0, $transparentColor);
 
 // use gradient class to calculate color between red and green
 require_once(dirname(__FILE__).'/ColorGradient.class.php');
-$hgrad = new ColorGradient(array(0 => 'FF0000', 100 => '00FF00'), 0.0, 1.0, 'hsv');
+$hgrad = new ColorGradient(array(0 => '00FF00', 100 => 'FF0000'), 0.0, 1.0, 'hsv');
 
 $c_score = $hgrad->getColorGD($pct/100,$img);
 list($r,$g,$b) = html2rgb($qc->getConf('color'));

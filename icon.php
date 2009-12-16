@@ -19,7 +19,7 @@ if($_REQUEST['type'] == 'small'){
         'font'   => dirname(__FILE__).'/vera.ttf',
         'size'   => 8,
         'xpad'   => 3,
-        'ypad'   => 1,
+        'ypad'   => 0,
         'crad'   => 1,
         'width'  => 50,
         'height' => 14,

@@ -16,7 +16,7 @@ index.treeattach = function(obj){
         img.className = 'qc_smallicon';
         elem.parentNode.appendChild(img);
     }
-}
+};
 
 
 function plugin_qc_toggle(e){

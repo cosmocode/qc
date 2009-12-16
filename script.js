@@ -4,6 +4,7 @@
  */
 index.saved_treeattach = index.treeattach;
 index.treeattach = function(obj){
+    if (!obj) return;
     index.saved_treeattach(obj);
 
     var items = getElementsByClass('wikilink1',obj,'a');

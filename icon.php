@@ -33,7 +33,7 @@ if($_REQUEST['type'] == 'small'){
         'ypad'   => 2,
         'crad'   => 2,
         'width'  => 600,
-        'height' => 20,
+        'height' => 25,
     );
     icon_large($pct,$data['score'],$data['fixme']);
 }

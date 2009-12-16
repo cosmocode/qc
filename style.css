@@ -50,3 +50,7 @@ div#plugin__qc__out h2 {
 div#plugin__qc__out h3 {
     font-size: 1em;
 }
+
+div.dokuwiki img.qc_smallicon {
+    margin-left: 1em;
+}

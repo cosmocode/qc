@@ -4,18 +4,8 @@ define('DOKU_DISABLE_GZIP_OUTPUT', 1);
 require_once(DOKU_INC.'inc/init.php');
 require_once(DOKU_INC.'inc/auth.php');
 require_once(DOKU_INC.'inc/template.php');
+require_once(dirname(__FILE__).'/ColorGradient.class.php');
 session_write_close();
-
-$OPTS = array(
-    'font'   => dirname(__FILE__).'/vera.ttf',
-    'size'   => 10,
-    'xpad'   => 6,
-    'ypad'   => 2,
-    'crad'   => 2,
-    'width'  => 600,
-    'height' => 20,
-);
-
 
 $ID   = cleanID($_REQUEST['id']);
 $qc = plugin_load('helper','qc');
@@ -24,36 +14,88 @@ $data = $qc->getQCData($ID);
 $maxerr = 10; //what score to use as total failure
 $pct = ($data['score']*100)/$maxerr;
 
-// create a transparent image
-$img   = imagecreatetruecolor($OPTS['width'],$OPTS['height']);
-imageSaveAlpha($img, true);
-imageAlphaBlending($img, true);
-$transparentColor = imagecolorallocatealpha($img, 127, 127, 127, 127);
-imagefill($img, 0, 0, $transparentColor);
+if($_REQUEST['type'] == 'small'){
+    $OPTS = array(
+        'font'   => dirname(__FILE__).'/vera.ttf',
+        'size'   => 8,
+        'xpad'   => 3,
+        'ypad'   => 1,
+        'crad'   => 1,
+        'width'  => 50,
+        'height' => 14,
+    );
+    icon_small($pct,$data['score'],$data['fixme']);
+}else{
+    $OPTS = array(
+        'font'   => dirname(__FILE__).'/vera.ttf',
+        'size'   => 10,
+        'xpad'   => 6,
+        'ypad'   => 2,
+        'crad'   => 2,
+        'width'  => 600,
+        'height' => 20,
+    );
+    icon_large($pct,$data['score'],$data['fixme']);
+}
 
-// use gradient class to calculate color between red and green
-require_once(dirname(__FILE__).'/ColorGradient.class.php');
-$hgrad = new ColorGradient(array(0 => '00FF00', 100 => 'FF0000'), 0.0, 1.0, 'hsv');
 
-$c_score = $hgrad->getColorGD($pct/100,$img);
-list($r,$g,$b) = html2rgb($qc->getConf('color'));
-$c_text  = imagecolorallocate($img,$r,$g,$b);
-$c_black = imagecolorallocate($img,0,0,0);
-$c_red   = imagecolorallocate($img,255,0,0);
-$c_green = imagecolorallocate($img,0,255,0);
+function icon_small($pct,$score,$fixmes){
+    global $qc;
+    global $OPTS;
 
-list($x,$y) = textbox($img,0,2,$qc->getLang('i_qcscore'),$c_text);
-list($x,$y) = textbox($img,$x+5,2,-1*$data['score'],$c_black,$c_score);
+    // create a transparent image
+    $img   = imagecreatetruecolor($OPTS['width'],$OPTS['height']);
+    imageSaveAlpha($img, true);
+    imageAlphaBlending($img, true);
+    $transparentColor = imagecolorallocatealpha($img, 127, 127, 127, 127);
+    imagefill($img, 0, 0, $transparentColor);
 
-list($x,$y) = textbox($img,$x+15,2,$qc->getLang('i_fixmes'),$c_text);
-list($x,$y) = textbox($img,$x+5,2,$data['fixme'],$c_black,(($data['fixme'])?$c_red:$c_green));
+    // use gradient class to calculate color between red and green
+    $hgrad = new ColorGradient(array(0 => '00FF00', 100 => 'FF0000'), 0.0, 1.0, 'hsv');
+    $c_score = $hgrad->getColorGD($pct/100,$img);
+    $c_black = imagecolorallocate($img,0,0,0);
+    $c_red   = imagecolorallocate($img,255,0,0);
+    $c_green = imagecolorallocate($img,0,255,0);
+
+    list($x,$y) = textbox($img,0,1,-1*$score,$c_black,$c_score);
+    list($x,$y) = textbox($img,$x+5,1,$fixmes,$c_black,(($fixmes)?$c_red:$c_green));
+
+    header('Content-Type: image/png');
+    imagepng($img);
+    imagedestroy($img);
+}
 
 
-#exit;
+function icon_large($pct,$score,$fixmes){
+    global $qc;
+    global $OPTS;
 
-header('Content-Type: image/png');
-imagepng($img);
-imagedestroy($img);
+    // create a transparent image
+    $img   = imagecreatetruecolor($OPTS['width'],$OPTS['height']);
+    imageSaveAlpha($img, true);
+    imageAlphaBlending($img, true);
+    $transparentColor = imagecolorallocatealpha($img, 127, 127, 127, 127);
+    imagefill($img, 0, 0, $transparentColor);
+
+    // use gradient class to calculate color between red and green
+    $hgrad = new ColorGradient(array(0 => '00FF00', 100 => 'FF0000'), 0.0, 1.0, 'hsv');
+    $c_score = $hgrad->getColorGD($pct/100,$img);
+    list($r,$g,$b) = html2rgb($qc->getConf('color'));
+    $c_text  = imagecolorallocate($img,$r,$g,$b);
+    $c_black = imagecolorallocate($img,0,0,0);
+    $c_red   = imagecolorallocate($img,255,0,0);
+    $c_green = imagecolorallocate($img,0,255,0);
+
+    list($x,$y) = textbox($img,0,2,$qc->getLang('i_qcscore'),$c_text);
+    list($x,$y) = textbox($img,$x+5,2,-1*$score,$c_black,$c_score);
+
+    list($x,$y) = textbox($img,$x+15,2,$qc->getLang('i_fixmes'),$c_text);
+    list($x,$y) = textbox($img,$x+5,2,$fixmes,$c_black,(($fixmes)?$c_red:$c_green));
+
+    header('Content-Type: image/png');
+    imagepng($img);
+    imagedestroy($img);
+}
 
 /**
  * Convert a hex color to it's RGB values

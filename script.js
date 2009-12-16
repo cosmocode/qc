@@ -1,4 +1,24 @@
 
+/**
+ * extend index object function to add quality icons to all pages
+ */
+index.saved_treeattach = index.treeattach;
+index.treeattach = function(obj){
+    index.saved_treeattach(obj);
+
+    var items = getElementsByClass('wikilink1',obj,'a');
+    for(var i=0; i<items.length; i++){
+        var elem = items[i];
+
+        var img       = document.createElement('img');
+        img.src       = DOKU_BASE+'lib/plugins/qc/icon.php?id='+elem.title+'&type=small';
+        img.alt       = '';
+        img.className = 'qc_smallicon';
+        elem.parentNode.appendChild(img);
+    }
+}
+
+
 function plugin_qc_toggle(e){
     var out = $('plugin__qc__out');
     if(!out) return;

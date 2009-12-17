@@ -87,17 +87,26 @@ function icon_large($pct,$score,$fixmes){
     $c_green = imagecolorallocate($img,0,255,0);
 
     list($x,$y) = textbox($img,0,2,$qc->getLang('i_qcscore'),$c_text);
-
-
     $x += 10;
-    $ico = imagecreatefrompng('skull.png');
-    $w   = imagesx($ico);
-    $h   = imagesy($ico);
-    imageSaveAlpha($ico, true);
-    imagecopy($img,$ico,$x,4,0,0,$w,$h);
-    imagedestroy($ico);
-    $x += $w;
-    list($x,$y) = textbox($img,$x,2,'('.$score.')',$c_black);
+
+    if($score){
+        $ico = imagecreatefrompng('skull.png');
+        $w   = imagesx($ico);
+        $h   = imagesy($ico);
+        imageSaveAlpha($ico, true);
+        imagecopy($img,$ico,$x,4,0,0,$w,$h);
+        imagedestroy($ico);
+        $x += $w;
+        list($x,$y) = textbox($img,$x,2,'('.$score.')',$c_black);
+    }else{
+        $ico = imagecreatefrompng('tick.png');
+        $w   = imagesx($ico);
+        $h   = imagesy($ico);
+        imageSaveAlpha($ico, true);
+        imagecopy($img,$ico,$x,4,0,0,$w,$h);
+        imagedestroy($ico);
+        $x += $w;
+    }
 
     if($fixmes){
         $x += 20;

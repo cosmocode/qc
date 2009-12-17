@@ -27,7 +27,7 @@ if($_REQUEST['type'] == 'small'){
     icon_small($pct,$data['score'],$data['fixme']);
 }else{
     $OPTS = array(
-        'font'   => dirname(__FILE__).'/vera.ttf',
+        'font'   => dirname(__FILE__).'/DejaVuSans-Bold.ttf',
         'size'   => 10,
         'xpad'   => 6,
         'ypad'   => 2,
@@ -87,10 +87,30 @@ function icon_large($pct,$score,$fixmes){
     $c_green = imagecolorallocate($img,0,255,0);
 
     list($x,$y) = textbox($img,0,2,$qc->getLang('i_qcscore'),$c_text);
-    list($x,$y) = textbox($img,$x+5,2,-1*$score,$c_black,$c_score);
 
-    list($x,$y) = textbox($img,$x+15,2,$qc->getLang('i_fixmes'),$c_text);
-    list($x,$y) = textbox($img,$x+5,2,$fixmes,$c_black,(($fixmes)?$c_red:$c_green));
+
+    $x += 10;
+    $ico = imagecreatefrompng('skull.png');
+    $w   = imagesx($ico);
+    $h   = imagesy($ico);
+    imageSaveAlpha($ico, true);
+    imagecopy($img,$ico,$x,4,0,0,$w,$h);
+    imagedestroy($ico);
+    $x += $w;
+    list($x,$y) = textbox($img,$x,2,'('.$score.')',$c_black);
+
+    if($fixmes){
+        $x += 20;
+        $ico = imagecreatefrompng('fixme.png');
+        $w   = imagesx($ico);
+        $h   = imagesy($ico);
+        imageSaveAlpha($ico, true);
+        imagecopy($img,$ico,$x,4,0,0,$w,$h);
+        imagedestroy($ico);
+        $x += $w;
+
+        list($x,$y) = textbox($img,$x,2,'('.$fixmes.')',$c_black);
+    }
 
     header('Content-Type: image/png');
     imagepng($img);

@@ -65,7 +65,12 @@ if($data['score']){
     echo '<div>';
     foreach($data['err'] as $err => $val){
         if($val){
-            echo '<h3>'.sprintf($qc->getLang($err.'_h'),$val).'</h3>';
+            echo '<h3>';
+            echo sprintf($qc->getLang($err.'_h'),$val);
+            for($i=0; $i<$val; $i++){
+                echo '<img src="'.DOKU_BASE.'lib/plugins/qc/skull.png" width="15" height="15" alt="☠" />';
+            }
+            echo '</h3>';
             echo '<p>'.sprintf($qc->getLang($err),$val).'</p>';
         }
     }

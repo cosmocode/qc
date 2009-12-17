@@ -97,7 +97,7 @@ function icon_large($pct,$score,$fixmes){
         imagecopy($img,$ico,$x,4,0,0,$w,$h);
         imagedestroy($ico);
         $x += $w;
-        list($x,$y) = textbox($img,$x,2,'('.$score.')',$c_black);
+        list($x,$y) = textbox($img,$x,2,'('.$score.')',$c_text);
     }else{
         $ico = imagecreatefrompng('tick.png');
         $w   = imagesx($ico);
@@ -118,7 +118,7 @@ function icon_large($pct,$score,$fixmes){
         imagedestroy($ico);
         $x += $w;
 
-        list($x,$y) = textbox($img,$x,2,'('.$fixmes.')',$c_black);
+        list($x,$y) = textbox($img,$x,2,'('.$fixmes.')',$c_text);
     }
 
     header('Content-Type: image/png');

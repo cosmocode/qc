@@ -21,11 +21,16 @@ class renderer_plugin_qc extends Doku_Renderer {
         'quote_count'   => 0,
         'fixme'         => 0,
         'hr'            => 0,
+        'formatted'     => 0,
 
         'created'       => 0,
         'modified'      => 0,
         'changes'       => 0,
         'authors'       => array(),
+
+        'internal_links'=> 0,
+        'broken_links'  => 0,
+        'external_links'=> 0,
 
         'chars'         => 0,
         'words'         => 0,
@@ -40,10 +45,12 @@ class renderer_plugin_qc extends Doku_Renderer {
             'headernest' => 0,
             'manyhr'     => 0,
             'manybr'     => 0,
+            'longformat' => 0,
         ),
     );
 
     var $quotelevel = 0;
+    var $formatting = 0;
 
     function document_start() {
         global $ID;
@@ -120,6 +127,51 @@ class renderer_plugin_qc extends Doku_Renderer {
             $this->doc['err']['singleauthor'] = 1;
         }
 
+        // 1 point for too small document
+        if($this->doc['chars'] < 150){
+            $this->doc['err']['toosmall'] = 1;
+        }
+
+        // 1 point for too large document
+        if($this->doc['chars'] > 100000){
+            $this->doc['err']['toolarge'] = 1;
+        }
+
+        // header to text ratio
+        $hc = $this->doc['header_count'][1] +
+              $this->doc['header_count'][2] +
+              $this->doc['header_count'][3] +
+              $this->doc['header_count'][4] +
+              $this->doc['header_count'][5];
+        if($hc){
+            $hr = $this->doc['chars']/$hc;
+
+            // 1 point for too many headers
+            if($hr < 200){
+                $this->doc['err']['manyheaders'] = 1;
+            }
+
+            // 1 point for too few headers
+            if($hr < 2000){
+                $this->doc['err']['fewheaders'] = 1;
+            }
+        }
+
+        // 1 point when no link at all
+        if(!$this->doc['internal_links']){
+            $this->doc['err']['nolink'] = 1;
+        }
+
+        // 0.5 for broken links when too many
+        if($this->doc['broken_links'] > 2){
+            $this->doc['err']['brokenlink'] = $this->doc['broken_links']*0.5;
+        }
+
+        // 2 points for lot's of formatting
+        if($this->doc['formatted'] && $this->doc['chars']/$this->doc['formatted'] < 3){
+            $this->doc['err']['manyformat'] = 2;
+        }
+
         // add up all scores
         foreach($this->doc['err'] as $err => $val) $this->doc['score'] += $val;
 
@@ -142,6 +194,13 @@ class renderer_plugin_qc extends Doku_Renderer {
         return 'qc';
     }
 
+    function internallink($id, $name = NULL, $search=NULL,$returnonly=false,$linktype='content') {
+        global $ID;
+        resolve_pageid(getNS($ID),$id,$exists);
+
+        $this->doc['internal_link']++;
+        if(!$exists) $this->doc['broken_link']++;
+    }
 
     function header($text, $level, $pos){
         $this->doc['header_count'][$level]++;
@@ -170,7 +229,40 @@ class renderer_plugin_qc extends Doku_Renderer {
         $this->quotelevel--;
     }
 
+    function strong_open() {
+        $this->formatting++;
+    }
 
+    function strong_close() {
+        $this->formatting--;
+    }
+
+    function emphasis_open() {
+        $this->formatting++;
+    }
+
+    function emphasis_close() {
+        $this->formatting--;
+    }
+
+    function underline_open() {
+        $this->formatting++;
+    }
+
+    function underline_close() {
+        $this->formatting--;
+    }
+
+    function cdata($text) {
+        if(!$this->formatting) return;
+
+        $len = utf8_strlen($text);
+
+        // 1 point for formattings longer than 500 chars
+        if($len>500) $this->doc['err']['longformat']++;
+
+        $this->doc['formatted'] += $len;
+    }
 }
 
 //Setup VIM: ex: et ts=4 enc=utf-8 :

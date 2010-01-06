@@ -40,7 +40,32 @@ $lang['deepquote']     = 'Your page contains deeply nested quotes, this might in
 $lang['singleauthor_h'] = 'Single Author Only';
 $lang['singleauthor'] = 'The page was only edited by a single author so far. Others should recheck the page for correctness and readability.';
 
+$lang['toosmall_h'] = 'Very Small Document';
+$lang['toosmall'] = 'This page seems to be irrationally small and is probably a stub. Consider extending the content, or maybe remove the page alltogether.';
+
+$lang['toolarge_h'] = 'Very Large Document';
+$lang['toolarge'] = 'This page is very large. Long pages are hard to read on a monitor. Consider splitting it into multiple pages instead.';
+
+$lang['manyheader_h'] = 'Many Headlines';
+$lang['manyheaders'] = 'Compared to the overall length, this page has a lot of headlines. Too much structure without any real content might hinder readability and usefulness of the page.';
+
+$lang['fewheaders_h'] = 'Few Headlines';
+$lang['fewheaders'] = 'Compared to the overall length, this page doesn\'t have many headlines. Structuring texts with subsection makes it easier to overview the content and helps readers to better understand the text. ';
+
+$lang['nolink_h'] = 'No Wiki Links';
+$lang['nolink'] = 'All pages in a wiki should be linked with each other. This page seems not to contain a single link to another wiki page. Maybe you can link to some related pages?';
+
+$lang['brokenlink_h'] = 'Many links to non-existing pages';
+$lang['brokenlink'] = 'This page contains several links to pages that do not exist. This is normal for new topics or while creating a new wiki. You just should make sure these pages get created. Also check if you maybe mistyped the linked page names.';
+
+$lang['manyformat_h'] = 'Too much Text Formatting';
+$lang['manyformat'] = 'Compared to the overall length, this page contains a lot of text formatting (like bold, italics or underline). Such formatting should only be used very sparingly or the readability suffers.';
+
+$lang['longformat_h'] = 'Long Formatted Passages';
+$lang['longformat'] = 'This page contains some longer passages that are formatted (like bold, italics or underlined). Such formatting should only be used very sparingly or the readability suffers.';
+
 /*
 $lang['_h'] = '';
 $lang[''] = '';
 */
+

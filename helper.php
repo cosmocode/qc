@@ -9,10 +9,6 @@ require_once(DOKU_INC.'inc/plugin.php');
 
 class helper_plugin_qc extends DokuWiki_Plugin {
 
-    function getInfo() {
-        return confToHash(dirname(__FILE__).'/info.txt');
-    }
-
     function tpl(){
         global $ACT,$INFO,$ID;
         if($ACT != 'show' || !$INFO['exists']) return;

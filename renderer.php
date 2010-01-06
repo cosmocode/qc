@@ -181,13 +181,6 @@ class renderer_plugin_qc extends Doku_Renderer {
     }
 
     /**
-     * return some info
-     */
-    function getInfo(){
-        return confToHash(dirname(__FILE__).'/info.txt');
-    }
-
-    /**
      * the format we produce
      */
     function getFormat(){

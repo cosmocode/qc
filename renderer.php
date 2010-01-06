@@ -152,7 +152,7 @@ class renderer_plugin_qc extends Doku_Renderer {
             }
 
             // 1 point for too few headers
-            if($hr < 2000){
+            if($hr > 2000){
                 $this->doc['err']['fewheaders'] = 1;
             }
         }

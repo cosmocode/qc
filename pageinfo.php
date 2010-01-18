@@ -68,7 +68,7 @@ if($data['score']){
             echo '<h3>';
             echo sprintf($qc->getLang($err.'_h'),$val);
             for($i=0; $i<$val; $i++){
-                echo '<img src="'.DOKU_BASE.'lib/plugins/qc/skull.png" width="15" height="15" alt="☠" />';
+                echo '<img src="'.DOKU_BASE.'lib/plugins/qc/pix/'.$qc->getConf('theme').'/status_red.png" alt="☹" />';
             }
             echo '</h3>';
             echo '<p>'.sprintf($qc->getLang($err),$val).'</p>';

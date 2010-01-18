@@ -4,7 +4,6 @@ define('DOKU_DISABLE_GZIP_OUTPUT', 1);
 require_once(DOKU_INC.'inc/init.php');
 require_once(DOKU_INC.'inc/auth.php');
 require_once(DOKU_INC.'inc/template.php');
-require_once(dirname(__FILE__).'/ColorGradient.class.php');
 session_write_close();
 
 $ID   = cleanID($_REQUEST['id']);
@@ -42,6 +41,7 @@ if($_REQUEST['type'] == 'small'){
 function icon_small($pct,$score,$fixmes){
     global $qc;
     global $OPTS;
+    global $maxerr;
 
     // create a transparent image
     $img   = imagecreatetruecolor($OPTS['width'],$OPTS['height']);
@@ -50,15 +50,19 @@ function icon_small($pct,$score,$fixmes){
     $transparentColor = imagecolorallocatealpha($img, 127, 127, 127, 127);
     imagefill($img, 0, 0, $transparentColor);
 
-    // use gradient class to calculate color between red and green
-    $hgrad = new ColorGradient(array(0 => '00FF00', 100 => 'FF0000'), 0.0, 1.0, 'hsv');
-    $c_score = $hgrad->getColorGD($pct/100,$img);
-    $c_black = imagecolorallocate($img,0,0,0);
-    $c_red   = imagecolorallocate($img,255,0,0);
-    $c_green = imagecolorallocate($img,0,255,0);
+
+    if($score > $maxerr) {
+        $c_score = imagecolorallocate($img,255,0,0);   #red
+    }elseif($score){
+        $c_score = imagecolorallocate($img,255,255,0); #yellow
+    }else{
+        $c_score = imagecolorallocate($img,0,255,0);   #green
+    }
+    $c_black  = imagecolorallocate($img,0,0,0);
+    $c_yellow = imagecolorallocate($img,255,255,0);
 
     list($x,$y) = textbox($img,0,1,-1*$score,$c_black,$c_score);
-    list($x,$y) = textbox($img,$x+5,1,$fixmes,$c_black,(($fixmes)?$c_red:$c_green));
+    list($x,$y) = textbox($img,$x+5,1,$fixmes,$c_black,$c_yellow);
 
     header('Content-Type: image/png');
     imagepng($img);
@@ -69,6 +73,7 @@ function icon_small($pct,$score,$fixmes){
 function icon_large($pct,$score,$fixmes){
     global $qc;
     global $OPTS;
+    global $maxerr;
 
     // create a transparent image
     $img   = imagecreatetruecolor($OPTS['width'],$OPTS['height']);
@@ -77,9 +82,6 @@ function icon_large($pct,$score,$fixmes){
     $transparentColor = imagecolorallocatealpha($img, 127, 127, 127, 127);
     imagefill($img, 0, 0, $transparentColor);
 
-    // use gradient class to calculate color between red and green
-    $hgrad = new ColorGradient(array(0 => '00FF00', 100 => 'FF0000'), 0.0, 1.0, 'hsv');
-    $c_score = $hgrad->getColorGD($pct/100,$img);
     list($r,$g,$b) = html2rgb($qc->getConf('color'));
     $c_text  = imagecolorallocate($img,$r,$g,$b);
     $c_black = imagecolorallocate($img,0,0,0);
@@ -89,28 +91,29 @@ function icon_large($pct,$score,$fixmes){
     list($x,$y) = textbox($img,0,2,$qc->getLang('i_qcscore'),$c_text);
     $x += 10;
 
-    if($score){
-        $ico = imagecreatefrompng('skull.png');
-        $w   = imagesx($ico);
-        $h   = imagesy($ico);
-        imageSaveAlpha($ico, true);
-        imagecopy($img,$ico,$x,4,0,0,$w,$h);
-        imagedestroy($ico);
-        $x += $w;
-        list($x,$y) = textbox($img,$x,2,'('.$score.')',$c_text);
+    // status icon
+    if($score > $maxerr) {
+        $ico = DOKU_INC.'lib/plugins/qc/pix/'.$qc->getConf('theme').'/status_red.png';
+    }elseif($score){
+        $ico = DOKU_INC.'lib/plugins/qc/pix/'.$qc->getConf('theme').'/status_yellow.png';
     }else{
-        $ico = imagecreatefrompng('tick.png');
-        $w   = imagesx($ico);
-        $h   = imagesy($ico);
-        imageSaveAlpha($ico, true);
-        imagecopy($img,$ico,$x,4,0,0,$w,$h);
-        imagedestroy($ico);
-        $x += $w;
+        $ico = DOKU_INC.'lib/plugins/qc/pix/'.$qc->getConf('theme').'/status_green.png';
     }
+    $ico = imagecreatefrompng($ico);
+    $w   = imagesx($ico);
+    $h   = imagesy($ico);
+    imageSaveAlpha($ico, true);
+    imagecopy($img,$ico,$x,4,0,0,$w,$h);
+    imagedestroy($ico);
+    $x += $w;
+
+    // print score if non-zero
+    if($score) list($x,$y) = textbox($img,$x,2,'('.$score.')',$c_text);
 
     if($fixmes){
         $x += 20;
-        $ico = imagecreatefrompng('fixme.png');
+        $ico = DOKU_INC.'lib/plugins/qc/pix/'.$qc->getConf('theme').'/fixme.png';
+        $ico = imagecreatefrompng($ico);
         $w   = imagesx($ico);
         $h   = imagesy($ico);
         imageSaveAlpha($ico, true);

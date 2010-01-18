@@ -46,7 +46,7 @@ $lang['toosmall'] = 'This page seems to be irrationally small and is probably a 
 $lang['toolarge_h'] = 'Very Large Document';
 $lang['toolarge'] = 'This page is very large. Long pages are hard to read on a monitor. Consider splitting it into multiple pages instead.';
 
-$lang['manyheader_h'] = 'Many Headlines';
+$lang['manyheaders_h'] = 'Many Headlines';
 $lang['manyheaders'] = 'Compared to the overall length, this page has a lot of headlines. Too much structure without any real content might hinder readability and usefulness of the page.';
 
 $lang['fewheaders_h'] = 'Few Headlines';

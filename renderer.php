@@ -2,8 +2,8 @@
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
 
-// we inherit from the XHTML renderer instead directly of the base renderer
 require_once DOKU_INC.'inc/parser/renderer.php';
+require_once DOKU_INC.'inc/fulltext.php';
 
 /**
  * The Renderer
@@ -84,6 +84,12 @@ class renderer_plugin_qc extends Doku_Renderer {
      * Here the score is calculated
      */
     function document_end() {
+        global $ID;
+
+        // 2 points for missing backlinks
+        if(!count(ft_backlinks($ID))){
+            $this->doc['err']['nobacklink'] += 2;
+        }
 
         // 1 point for each FIXME
         $this->doc['err']['fixme'] += $this->doc['fixme'];

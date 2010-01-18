@@ -63,6 +63,7 @@ if($data['score']){
     echo '<h2>'.$qc->getLang('errorsfound_h').'</h2>';
     echo '<p>'.$qc->getLang('errorsfound').'</p>';
     echo '<div>';
+    arsort($data['err']); #sort by score
     foreach($data['err'] as $err => $val){
         if($val){
             echo '<h3>';

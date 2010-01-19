@@ -56,7 +56,7 @@ $lang['nolink_h'] = 'Keine Wiki Links';
 $lang['nolink'] = 'Alle Seiten innerhalb eines Wikis sollten miteinander verlinkt sein. Diese Seite scheint keine Links zu einer anderen Seite des Wikis zu enthalten. Erwägen Sie das Verlinken verwandter Wikiseiten.';
 
 $lang['brokenlink_h'] = 'Viele Links auf nicht-existierende Seiten';
-$lang['brokenlink'] = 'Diese Seite enthälte mehrere Links auf Wikiseiten die (noch) nicht angelegt wurden. Das ist normal bei neuen Themen oder einem Wiki im Aufbau, Sie sollten jedoch sicherstellen, dass die entsprechenden Seiten irgendwann angelegt werden. Sie sollten die Links aber auch auf Tippfehler prüfen.';
+$lang['brokenlink'] = 'Diese Seite enthälte mehrere Links auf Wikiseiten die (noch) nicht angelegt wurden. Das ist normal bei neuen Themen oder einem Wiki im Aufbau, Sie sollten jedoch sicherstellen, dass die entsprechenden Seiten irgendwann angelegt werden. Sie sollten die Links zudem auf Tippfehler prüfen.';
 
 $lang['manyformat_h'] = 'Sehr viele Textformatierungen';
 $lang['manyformat'] = 'Im Vergleich zur Gesamtlänge des Texts, enthält diese Seite sehr viele Textformatierungen (wie fett, kursiv oder unterstrichen). Solcherlei Formatierungen sollten nur sparsam eingesetzt werden, da sonst die Lesbarkeit des Textes leidet.';
@@ -65,7 +65,7 @@ $lang['longformat_h'] = 'Lange formatierte Passagen';
 $lang['longformat'] = 'Diese Seite enthält einige sehr lange Passagen die formatiert wurden (wie fett, kursiv oder unterstrichen). Solcherlei Formatierungen sollten nur sparsam eingesetzt werden, da sonst die Lesbarkeit des Textes leidet.';
 
 $lang['nobacklink_h'] = 'Keine Rückverweise';
-$lang['nobacklink'] = 'Es scheint, dass keine andere Seite im Wiki zu dieser Seite verlinkt. Das heisst normalerweise, dass die Seite nur über die Suche und die Übersicht aufzufinden ist. Das mag nicht der Fall sein, wenn Sie Plugins verwenden die automatisch Seiten auflisten. Verscuhen Sie diese Seite von einer anderen Seite aus sinnvoll zu verlinken.';
+$lang['nobacklink'] = 'Es scheint, dass keine andere Seite im Wiki zu dieser Seite verlinkt. Das heisst normalerweise, dass die Seite nur über die Suche und die Übersicht aufzufinden ist. Das mag nicht der Fall sein, wenn Sie Plugins verwenden die automatisch Seiten auflisten. Versuchen Sie diese Seite von einer anderen Seite aus sinnvoll zu verlinken.';
 
 
 /*

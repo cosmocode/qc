@@ -197,8 +197,12 @@ class renderer_plugin_qc extends Doku_Renderer {
         global $ID;
         resolve_pageid(getNS($ID),$id,$exists);
 
-        $this->doc['internal_link']++;
-        if(!$exists) $this->doc['broken_link']++;
+        $this->doc['internal_links']++;
+        if(!$exists) $this->doc['broken_links']++;
+    }
+
+    function externallink($url, $name = NULL) {
+        $this->doc['external_links']++;
     }
 
     function header($text, $level, $pos){

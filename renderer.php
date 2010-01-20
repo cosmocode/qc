@@ -31,6 +31,7 @@ class renderer_plugin_qc extends Doku_Renderer {
         'internal_links'=> 0,
         'broken_links'  => 0,
         'external_links'=> 0,
+        'link_lengths'  => array(),
 
         'chars'         => 0,
         'words'         => 0,
@@ -196,6 +197,16 @@ class renderer_plugin_qc extends Doku_Renderer {
     function internallink($id, $name = NULL, $search=NULL,$returnonly=false,$linktype='content') {
         global $ID;
         resolve_pageid(getNS($ID),$id,$exists);
+
+        // calculate link width
+        $a = explode(':',$ID);
+        $b = explode(':',$id);
+        while($a[0] == $b[0]){
+            array_shift($a);
+            array_shift($b);
+        }
+        $length = count($a)+count($b)-2;
+        $this->doc['link_lengths'][] = $length;
 
         $this->doc['internal_links']++;
         if(!$exists) $this->doc['broken_links']++;

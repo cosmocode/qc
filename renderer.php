@@ -199,13 +199,13 @@ class renderer_plugin_qc extends Doku_Renderer {
         resolve_pageid(getNS($ID),$id,$exists);
 
         // calculate link width
-        $a = explode(':',$ID);
-        $b = explode(':',$id);
-        while($a[0] == $b[0]){
+        $a = explode(':',getNS($ID));
+        $b = explode(':',getNS($id));
+        while(isset($a[0]) && $a[0] == $b[0]){
             array_shift($a);
             array_shift($b);
         }
-        $length = count($a)+count($b)-2;
+        $length = count($a)+count($b);
         $this->doc['link_lengths'][] = $length;
 
         $this->doc['internal_links']++;

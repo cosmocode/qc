@@ -64,6 +64,9 @@ $lang['manyformat'] = 'Im Vergleich zur Gesamtlänge des Texts, enthält diese S
 $lang['longformat_h'] = 'Lange formatierte Passagen';
 $lang['longformat'] = 'Diese Seite enthält einige sehr lange Passagen die formatiert wurden (wie fett, kursiv oder unterstrichen). Solcherlei Formatierungen sollten nur sparsam eingesetzt werden, da sonst die Lesbarkeit des Textes leidet.';
 
+$lang['multiformat_h'] = 'Mehrfach formatierter Text';
+$lang['multiformat'] = 'Diese Seite enthält Text der mit mehreren, unterschiedlichen Formatierungen (wie fett, kursiv oder unterstrichen) ausgezeichnet wurde. Das Kombinieren mehrerer Formatierungen ist typografisch schlechter Stil und behindert die Lesbarkeit.';
+
 $lang['nobacklink_h'] = 'Keine Rückverweise';
 $lang['nobacklink'] = 'Es scheint, dass keine andere Seite im Wiki zu dieser Seite verlinkt. Das heisst normalerweise, dass die Seite nur über die Suche und die Übersicht aufzufinden ist. Das mag nicht der Fall sein, wenn Sie Plugins verwenden die automatisch Seiten auflisten. Versuchen Sie diese Seite von einer anderen Seite aus sinnvoll zu verlinken.';
 

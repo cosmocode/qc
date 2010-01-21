@@ -64,6 +64,9 @@ $lang['manyformat'] = 'Compared to the overall length, this page contains a lot 
 $lang['longformat_h'] = 'Long Formatted Passages';
 $lang['longformat'] = 'This page contains some longer passages that are formatted (like bold, italics or underlined). Such formatting should only be used very sparingly or the readability suffers.';
 
+$lang['multiformat_h'] = 'Overly Formatted Text';
+$lang['multiformat'] = 'This page contains some text that is formatted with multiple different markups (like bold, italics or underlined). Combining formatting is considered typographically bad style and hinders the readability.';
+
 $lang['nobacklink_h'] = 'No Backlinks';
 $lang['nobacklink'] = 'It seems like no other page is linking to this page. This usually means it can\'t be found by other means than the search or the index. This might not be true, if you\'re using automatic page listing plugins. See if you can link to this page from somewhere else in the wiki.';
 

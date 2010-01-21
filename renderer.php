@@ -47,6 +47,7 @@ class renderer_plugin_qc extends Doku_Renderer {
             'manyhr'     => 0,
             'manybr'     => 0,
             'longformat' => 0,
+            'multiformat'=> 0,
         ),
     );
 
@@ -274,6 +275,9 @@ class renderer_plugin_qc extends Doku_Renderer {
 
         // 1 point for formattings longer than 500 chars
         if($len>500) $this->doc['err']['longformat']++;
+
+        // 1 point for each multiformatting
+        if($this->formatting > 1) $this->doc['err']['multiformat'] += 1*($this->formatting - 1);
 
         $this->doc['formatted'] += $len;
     }

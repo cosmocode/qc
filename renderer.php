@@ -151,7 +151,8 @@ class renderer_plugin_qc extends Doku_Renderer {
               $this->doc['header_count'][3] +
               $this->doc['header_count'][4] +
               $this->doc['header_count'][5];
-        if($hc){
+        $hc--; //we expect at least 1
+        if($hc > 0){
             $hr = $this->doc['chars']/$hc;
 
             // 1 point for too many headers

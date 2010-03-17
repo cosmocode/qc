@@ -55,7 +55,26 @@ div#plugin__qc__out img {
     margin-left: 3px;
 }
 
-
 div.dokuwiki img.qc_smallicon {
     margin-left: 1em;
 }
+
+#plugin__qc_admin table {
+    width: 50em;
+}
+
+#plugin__qc_admin td,
+#plugin__qc_admin th {
+    padding:3px;
+}
+
+#plugin__qc_admin th.quality,
+#plugin__qc_admin th.fixme {
+    width: 10em;
+}
+
+#plugin__qc_admin .right {
+    text-align:right;
+}
+
+

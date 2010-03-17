@@ -1,5 +1,12 @@
 <?php
 
+$lang['menu']           = 'Quality Summary';
+$lang['admin_headline'] = 'Quality Summary';
+$lang['admin_desc']     = 'Here are shown the %d pages with the most FIXMEs and worst quality scoring. Click on the title of a cell to order it. The summary is updated daily.';
+$lang['admin_page']     = 'Page';
+$lang['admin_quality']  = 'Quality';
+$lang['admin_fixme']    = 'Fixme';
+
 $lang['intro_h']       = 'Page Analysis';
 
 $lang['g_created']     = 'Created:';

@@ -1,5 +1,12 @@
 <?php
 
+$lang['menu']           = 'Qualitätsbericht';
+$lang['admin_headline'] = 'Qualitätsbericht';
+$lang['admin_desc']     = 'Hier sind %d Seiten aufgelistet, welche die meisten FIXMEs und die schlechteste Qualitätsbewertung haben. Spalten können durch einen Klick auf die Überschrift sortiert werden. Der Bericht wird täglich aktuallisiert.';
+$lang['admin_page']     = 'Seite';
+$lang['admin_quality']  = 'Qualität';
+$lang['admin_fixme']    = 'Fixme';
+
 $lang['intro_h']       = 'Seiten-Analyse';
 
 $lang['g_created']     = 'Angelegt:';

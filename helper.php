@@ -13,6 +13,10 @@ class helper_plugin_qc extends DokuWiki_Plugin {
         global $ACT,$INFO,$ID;
         if($ACT != 'show' || !$INFO['exists']) return;
         if(p_get_metadata($ID, 'relation qcplugin_disabled')) return;
+        if ($this->getConf('adminonly')) {
+            if (!isset($_SERVER['REMOTE_USER']) || !auth_isadmin())
+                return;
+        }
         echo '<div id="plugin__qc__wrapper">';
         echo '<img src="'.DOKU_BASE.'lib/plugins/qc/icon.php?id='.$ID.'" width="600" height="25" alt="" id="plugin__qc__icon" />';
         echo '<div id="plugin__qc__out" style="display:none"></div>';
@@ -32,4 +36,4 @@ class helper_plugin_qc extends DokuWiki_Plugin {
     }
 
 }
-// vim:ts=4:sw=4:et:enc=utf-8: 
+// vim:ts=4:sw=4:et:enc=utf-8:

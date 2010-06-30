@@ -11,6 +11,10 @@ class helper_plugin_qc extends DokuWiki_Plugin {
 
     function tpl(){
         global $ACT,$INFO,$ID;
+        if (!function_exists('gd_info')) {
+            msg('You have to install php-gd lib to use the QC plugin.');
+            return;
+        }
         if($ACT != 'show' || !$INFO['exists']) return;
         if(p_get_metadata($ID, 'relation qcplugin_disabled')) return;
         if ($this->getConf('adminonly')) {

@@ -83,20 +83,6 @@ class action_plugin_qc extends DokuWiki_Action_Plugin {
      * @return true when everything is alright
      */
     function isOk($arr) {
-        foreach ($arr as $key => $val) {
-            if ($val != 0) return false;
-        }
-        return true;
+        return count(array_filter($arr)) == 0;
     }
-
-    function hashToConf($data, $file) {
-        $str = "";
-        foreach ($data as $k => $v) {
-            $str .= sprintf("%-30s %s\n",$k,$v);
-        }
-        io_saveFile($file, $str);
-    }
-
 }
-
-?>

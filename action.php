@@ -21,18 +21,16 @@ class action_plugin_qc extends DokuWiki_Action_Plugin {
     var $run = false;
 
     /**
-     * Constructor - get some config details and check if a check runs in the last 24h
+     * File with the queue informations
+     */
+    var $file;
+
+    /**
+     * Constructor - set up some pathes
      */
     function action_plugin_qc() {
         global $conf;
-
-        // check if a runfile exists - if not -> there is no last run
-        if (!is_file($conf['cachedir'].'/qclastgather')) return;
-
-        // check last run
-        $get = fileatime($conf['cachedir'].'/qclastgather');
-        $get = intval($get);
-        if ($get+(60*60*24) > time()) $this->run = true;
+        $this->file = $conf['tmpdir'] . '/qcgather';
     }
 
     /**
@@ -51,30 +49,32 @@ class action_plugin_qc extends DokuWiki_Action_Plugin {
      */
     function qccron(&$event, $param) {
         if ($this->run) return;
+
+        global $ID;
         $this->run = true;
-        echo 'qc data gatherer: started'.NL;
+        echo 'qc data gatherer: started on '.$ID.NL;
+        $qc = $this->loadHelper('qc',true);
 
-        global $conf;
-        $qc      = $this->loadHelper('qc',true);
         $persist = array();
+        if (is_file($this->file)) {
+            $persist = file_get_contents($this->file);
+            $persist = unserialize($persist);
+        } else {
+            $persist = array();
+            echo '2';
+        }
 
-        // do the search
-        search($resultset, $conf['datadir'], 'search_allpages', array('skipacl' => true));
+        $fixme = $qc->getQCData($ID);
 
-        foreach ($resultset as $result) {
-            $fixme = $qc->getQCData($result['id']);
-
-            // when there are no quality problems we won't need the information
-            if ($this->isOk($fixme['err'])) continue;
-
-            $persist[$result['id']] = $fixme;
+        // when there are no quality problems we won't need the information
+        if ($this->isOk($fixme['err'])) {
+            unset($persist[$ID]);
+        } else {
+            $persist[$ID] = $fixme;
         }
 
         $persist = serialize($persist);
-
-        io_saveFile($conf['tmpdir'].'/qcgather', $persist);
-
-        touch($conf['cachedir'].'/qclastgather');
+        file_put_contents($this->file, $persist);
     }
 
     /**

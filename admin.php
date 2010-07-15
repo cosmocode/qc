@@ -31,7 +31,7 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin {
 
         // load the quality data
         if (is_file($conf['tmpdir'].'/qcgather')) {
-            $this->data = io_readFile($conf['tmpdir'].'/qcgather');
+            $this->data = file_get_contents($conf['tmpdir'].'/qcgather');
             $this->data = unserialize($this->data);
         } else {
             $this->data = array();

@@ -33,8 +33,8 @@ class helper_plugin_qc extends DokuWiki_Plugin {
         global $ID;
         $oldid = $ID;
         $ID = $theid;
-        require_once(DOKU_INC.'inc/parserutils.php');
-        $data = unserialize(p_cached_output(wikiFN($ID), 'qc'));
+        require_once DOKU_INC.'inc/parserutils.php';
+        $data = unserialize(p_cached_output(wikiFN($ID), 'qc', $ID));
         $ID = $oldid;
         return $data;
     }

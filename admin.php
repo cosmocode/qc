@@ -78,7 +78,7 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin {
                 if ($max == 0) break;
                 echo '  <tr>';
                 echo '    <td>';
-                tpl_pagelink($id, $id);
+                tpl_pagelink(':' . $id, $id);
                 echo '</td>';
                 echo '    <td class="centeralign">' . $data['score'] . ' <img src="'. $this->getImgUrl($data['score']) .'" /></td>';
                 echo '    <td class="centeralign">' . $data['err']['fixme'] . '</td>';

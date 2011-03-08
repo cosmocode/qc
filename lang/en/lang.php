@@ -21,7 +21,7 @@ $lang['anonymous']     = 'Anonymous';
 $lang['i_qcscore']     = 'Quality:';
 
 $lang['errorsfound_h'] = 'Possible Quality Problems Identified';
-$lang['errorsfound']   = 'After analyzing the page structure, a few possible problems about the readability and usability of the page where identified. Please have a look at the points below and see if you can correct them. Keep in mind that this was an automatic analysis - you need to judge yourself if it is correct.';
+$lang['errorsfound']   = 'After analyzing the page structure, a few possible problems about the readability and usability of the page were identified. Please have a look at the points below and see if you can correct them. Keep in mind that this was an automatic analysis - you need to judge yourself if it is correct.';
 
 $lang['fixme_h']       = '%d FIXME(s)';
 $lang['fixme']         = 'The page contains markers about missing or incorrect content. You should replace the FIXME markers with corrected content.';

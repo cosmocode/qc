@@ -77,6 +77,9 @@ $lang['multiformat'] = 'This page contains some text that is formatted with mult
 $lang['nobacklink_h'] = 'No Backlinks';
 $lang['nobacklink'] = 'It seems like no other page is linking to this page. This usually means it can\'t be found by other means than the search or the index. This might not be true, if you\'re using automatic page listing plugins. See if you can link to this page from somewhere else in the wiki.';
 
+$lang['tooManyEdits_h'] = 'Too many edits';
+$lang['tooManyEdits'] = 'This article was edited more then 10 times a day. When testing your changes, press preview instead of save. Too many small changes make the revisions-overview very confusing.';
+
 /*
 $lang['_h'] = '';
 $lang[''] = '';

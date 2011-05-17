@@ -77,6 +77,8 @@ $lang['multiformat'] = 'Diese Seite enthält Text der mit mehreren, unterschiedl
 $lang['nobacklink_h'] = 'Keine Rückverweise';
 $lang['nobacklink'] = 'Es scheint, dass keine andere Seite im Wiki zu dieser Seite verlinkt. Das heisst normalerweise, dass die Seite nur über die Suche und die Übersicht aufzufinden ist. Das mag nicht der Fall sein, wenn Sie Plugins verwenden die automatisch Seiten auflisten. Versuchen Sie diese Seite von einer anderen Seite aus sinnvoll zu verlinken.';
 
+$lang['tooManyEdits_h'] = 'Zu viele Revisionen';
+$lang['tooManyEdits'] = 'Es scheint als sei dieser Artikel unnötig oft abgespeichert worden. Sollten Sie Ihre Änderrungen testen wollen, so verwenden Sie die Vorschau-Funktion anstelle des Abspeicherns.';
 
 /*
 $lang['_h'] = '';

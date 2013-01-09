@@ -131,7 +131,7 @@ class renderer_plugin_qc extends Doku_Renderer {
         }
 
         // 1 point for single author only
-        if(count($this->doc['authors']) == 1){
+        if(!$this->getConf('single_author_only') && count($this->doc['authors']) == 1){
             $this->doc['err']['singleauthor'] = 1;
         }
 

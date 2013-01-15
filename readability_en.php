@@ -8,8 +8,7 @@
  * @license GPL 2
  */
 
-
-$text = $_REQUEST['html'].'. ';
+$text = p_wiki_xhtml($data['id']) . ". ";
 $text = preg_replace('!</(li|h[1-5])>!i','. ',$text); //make sentences from those tags
 $text = strip_tags($text);
 

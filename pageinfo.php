@@ -79,6 +79,6 @@ if($data['score']){
 }
 
 // load the readability-plugin for the english language
-if ($local == 'en') {
-    require_once('readability.php');
+if ($conf['lang'] == 'en') {
+   require_once('readability_en.php');
 }

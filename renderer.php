@@ -81,7 +81,7 @@ class renderer_plugin_qc extends Doku_Renderer {
         $text = rawWiki($ID);
         $this->doc['id'] = $ID;
         $this->doc['chars'] = utf8_strlen($text);
-        $this->doc['words'] = count(array_filter(preg_split('/[^\w\-_]/u',$this->doc['text'])));
+        $this->doc['words'] = count(array_filter(preg_split('/[^\w\-_]/u',$text)));
 
     }
 

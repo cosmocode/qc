@@ -126,5 +126,3 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin {
     }
 
 }
-
-?>

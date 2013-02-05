@@ -9,35 +9,54 @@ require_once(DOKU_INC.'inc/plugin.php');
 
 class helper_plugin_qc extends DokuWiki_Plugin {
 
-    function tpl(){
-        global $ACT,$INFO,$ID;
+    /**
+     * Checks if the qc plugin is active for the specific page
+     * @return bool
+     */
+    function qcIsActive($id, $act = null) {
         if (!function_exists('gd_info')) {
             msg('You have to install php-gd lib to use the QC plugin.');
-            return;
+            return false;
         }
-        if($ACT != 'show' || !$INFO['exists']) return;
-        if(p_get_metadata($ID, 'relation qcplugin_disabled')) return;
+
+        global $INFO;
+        if($act !== 'show' || (isset($INFO) && !$INFO['exists'])) {
+            return false;
+        }
+
+        if(p_get_metadata($id, 'relation qcplugin_disabled')) {
+            return false;
+        }
+
+        if ($id === 'wiki:welcome' || $id === 'wiki:syntax' || $id === "wiki:dokuwiki") {
+            return false;
+        }
+
         if ($this->getConf('adminonly')) {
-            if (!isset($_SERVER['REMOTE_USER']) || !auth_isadmin())
-                return;
+            if (!isset($_SERVER['REMOTE_USER']) || !auth_isadmin()) {
+                return false;
+            }
         }
-        echo '<div id="plugin__qc__wrapper">';
-        echo '<img src="'.DOKU_BASE.'lib/plugins/qc/icon.php?id='.$ID.'" width="600" height="25" alt="" id="plugin__qc__icon" />';
-        echo '<div id="plugin__qc__out" style="display:none"></div>';
-        echo '</div>';
+
+        return true;
     }
 
+    function tpl(){
+        global $ID, $ACT;
+        if (!$this->qcIsActive($ID, $ACT)) {
+            return false;
+        }
 
+        echo '<div id="plugin__qc__wrapper">' .
+                 '<img src="'.DOKU_BASE.'lib/plugins/qc/icon.php?id='.$ID.'" width="600" height="25" alt="" id="plugin__qc__icon" />' .
+                 '<div id="plugin__qc__out" style="display:none"></div>' .
+             '</div>';
+    }
 
-    function getQCData($theid){
-        global $ID;
-        $oldid = $ID;
-        $ID = $theid;
+    function getQCData($id) {
         require_once DOKU_INC.'inc/parserutils.php';
-        $data = unserialize(p_cached_output(wikiFN($ID), 'qc', $ID));
-        $ID = $oldid;
+        $data = unserialize(p_cached_output(wikiFN($id), 'qc', $id));
         return $data;
     }
 
 }
-// vim:ts=4:sw=4:et:enc=utf-8:

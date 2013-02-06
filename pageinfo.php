@@ -78,5 +78,7 @@ if($data['score']){
     echo '</div>';
 }
 
-//dbg($data);
-
+// load the readability-plugin for the english language
+if ($conf['lang'] == 'en') {
+   require_once('readability_en.php');
+}

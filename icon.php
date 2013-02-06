@@ -6,39 +6,43 @@ require_once(DOKU_INC.'inc/auth.php');
 require_once(DOKU_INC.'inc/template.php');
 session_write_close();
 
-$ID   = cleanID($_REQUEST['id']);
 $qc = plugin_load('helper','qc');
+$ID   = cleanID($_REQUEST['id']);
 $data = $qc->getQCData($ID);
 
 $maxerr = 10; //what score to use as total failure
-$pct = ($data['score']*100)/$maxerr;
 
-if($_REQUEST['type'] == 'small'){
-    $OPTS = array(
-        'font'   => dirname(__FILE__).'/vera.ttf',
-        'size'   => 8,
-        'xpad'   => 3,
-        'ypad'   => 0,
-        'crad'   => 1,
-        'width'  => 50,
-        'height' => 14,
-    );
-    icon_small($pct,$data['score'],$data['fixme']);
-}else{
-    $OPTS = array(
-        'font'   => dirname(__FILE__).'/DejaVuSans-Bold.ttf',
-        'size'   => 10,
-        'xpad'   => 6,
-        'ypad'   => 2,
-        'crad'   => 2,
-        'width'  => 600,
-        'height' => 25,
-    );
-    icon_large($pct,$data['score'],$data['fixme']);
+switch ($_REQUEST['type']){
+    case 'small':
+        // the check is necessary therewith no default wiki pages (e.g. syntax) will be evaluated
+        if (!$qc->qcIsActive($ID, "show")) {
+            return;
+        }
+        $OPTS = array(
+            'font'   => dirname(__FILE__).'/vera.ttf',
+            'size'   => 8,
+            'xpad'   => 3,
+            'ypad'   => 2,
+            'crad'   => 1,
+            'width'  => 125,
+            'height' => 20,
+        );
+        icon_small($data['score'],$data['fixme']);
+        break;
+    default:
+        $OPTS = array(
+            'font'   => dirname(__FILE__).'/DejaVuSans-Bold.ttf',
+            'size'   => 10,
+            'xpad'   => 6,
+            'ypad'   => 2,
+            'crad'   => 2,
+            'width'  => 600,
+            'height' => 25,
+        );
+        icon_large($data['score'],$data['fixme']);
 }
 
-
-function icon_small($pct,$score,$fixmes){
+function icon_small($score,$fixmes){
     global $qc;
     global $OPTS;
     global $maxerr;
@@ -59,10 +63,22 @@ function icon_small($pct,$score,$fixmes){
         $c_score = imagecolorallocate($img,0,255,0);   #green
     }
     $c_black  = imagecolorallocate($img,0,0,0);
-    $c_yellow = imagecolorallocate($img,255,255,0);
+    //$c_yellow = imagecolorallocate($img,255,255,0);
 
-    list($x,$y) = textbox($img,0,1,-1*$score,$c_black,$c_score);
-    list($x,$y) = textbox($img,$x+5,1,$fixmes,$c_black,$c_yellow);
+    list($x,$y) = textbox($img,0,1,$score,$c_black,$c_score);
+    if($fixmes){
+        $x += 10;
+        $ico = DOKU_INC.'lib/plugins/qc/pix/'.$qc->getConf('theme').'/fixme.png';
+        $ico = imagecreatefrompng($ico);
+        $w   = imagesx($ico);
+        $h   = imagesy($ico);
+        imageSaveAlpha($ico, true);
+        imagecopy($img,$ico,$x,4,0,0,$w,$h);
+        imagedestroy($ico);
+        $x += $w;
+
+        list($x,$y) = textbox($img,$x,2, null, null);
+    }
 
     header('Content-Type: image/png');
     imagepng($img);
@@ -70,7 +86,7 @@ function icon_small($pct,$score,$fixmes){
 }
 
 
-function icon_large($pct,$score,$fixmes){
+function icon_large($score,$fixmes){
     global $qc;
     global $OPTS;
     global $maxerr;
@@ -84,9 +100,9 @@ function icon_large($pct,$score,$fixmes){
 
     list($r,$g,$b) = html2rgb($qc->getConf('color'));
     $c_text  = imagecolorallocate($img,$r,$g,$b);
-    $c_black = imagecolorallocate($img,0,0,0);
-    $c_red   = imagecolorallocate($img,255,0,0);
-    $c_green = imagecolorallocate($img,0,255,0);
+    //$c_black = imagecolorallocate($img,0,0,0);
+    //$c_red   = imagecolorallocate($img,255,0,0);
+    //$c_green = imagecolorallocate($img,0,255,0);
 
     list($x,$y) = textbox($img,0,2,$qc->getLang('i_qcscore'),$c_text);
     $x += 10;
@@ -121,7 +137,7 @@ function icon_large($pct,$score,$fixmes){
         imagedestroy($ico);
         $x += $w;
 
-        list($x,$y) = textbox($img,$x,2,'('.$fixmes.')',$c_text);
+        list($x,$y) = textbox($img,$x,2, null, $c_text);
     }
 
     header('Content-Type: image/png');

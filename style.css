@@ -15,8 +15,12 @@
     width: 590px;
     height: 100%;
 }
-#plugin__qc__wrapper a img {
+#plugin__qc__wrapper a #qc_smiley,
+#plugin__qc__wrapper a #qc_fixme {
     padding: 0 10px;
+}
+#plugin__qc__wrapper a img {
+    padding: 0 3px;
 }
 #plugin__qc__wrapper a dl dt {
     float: left;

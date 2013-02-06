@@ -35,40 +35,33 @@ jQuery(function () {
             img.src       = DOKU_BASE+'lib/plugins/qc/icon.php?id='+jQuery(this).attr('title')+'&type=small';
             img.alt       = '';
             img.className = 'qc_smallicon';
-            jQuery(this).after(img).andSelf().addClass("qc_check_applied");
+            jQuery(this).append(img).andSelf().addClass("qc_check_applied");
         });
     }
 
-});
 
-function plugin_qc_toggle(e){
-    var out = $('plugin__qc__out');
-    if(!out) return;
+    jQuery("#plugin__qc__closed").live("click", function (e) {
+        jQuery.ajax({
+            url: DOKU_BASE + 'lib/plugins/qc/pageinfo.php?id=' + jQuery(this).attr('title'),
+            success: function(result){
+                jQuery('#plugin__qc__closed').append(result);
+                jQuery('#plugin__qc__closed').attr("id", 'plugin__qc__open');
+            }
+        });
 
-    // extract needed params from the icon src URL
-    var param = e.target.src.split('?');
+        e.preventDefault();
+        return false;
+    });
 
-    // it's shown currently -> disable
-    if(out.style.display != 'none'){
-        out.style.display = 'none';
-        return;
-    }
+    jQuery("#qc_fixme").live("click", function(e) {
+        jQuery(".icon").each(function() {
+            if (jQuery(this).attr('alt') === "FIXME") {
+                jQuery('html, body').animate({scrollTop: jQuery(this).offset().top});
+                return false;
+            }
+        });
+        e.preventDefault();
+        return false;
+    });
 
-    // it's not shown currently -> fetch
-    out.innerHTML = 'loading...';
-    out.style.display = '';
-
-    var ajax = new sack(DOKU_BASE + 'lib/plugins/qc/pageinfo.php');
-    ajax.AjaxFailedAlert = '';
-    ajax.encodeURIString = false;
-    ajax.elementObj = out;
-    ajax.runAJAX(param[1]);
-
-}
-
-addInitEvent(function(){
-    var icon = $('plugin__qc__icon');
-    if(!icon) return;
-    addEvent(icon,'click',plugin_qc_toggle);
-    icon.style.cursor = 'pointer';
 });

@@ -1,6 +1,4 @@
-
-
-div#plugin__qc__wrapper {
+#plugin__qc__wrapper {
     font-size: 90%;
     background-color: __background_neu__;
     text: __text_neu__;
@@ -8,51 +6,45 @@ div#plugin__qc__wrapper {
     width: 600px;
     padding: 1px;
 }
-
-div#plugin__qc__out {
-    padding: 1em;
+#plugin__qc__wrapper a {
+    padding-left: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    color: #000;
+    display: block;
+    width: 590px;
+    height: 100%;
 }
-
-div#plugin__qc__out dl dt {
+#plugin__qc__wrapper a img {
+    padding: 0 10px;
+}
+#plugin__qc__wrapper a dl dt {
     float: left;
-    width: 10em;
-    clear: left;
 }
-
-
-div#plugin__qc__out div {
+#plugin__qc__wrapper a div {
     margin-left: 1em;
 }
-
-div#plugin__qc__out p {
+#plugin__qc__wrapper a p {
     margin-left: 1em;
 }
-
-div#plugin__qc__out h1,
-div#plugin__qc__out h2,
-div#plugin__qc__out h3,
-div#plugin__qc__out h4,
-div#plugin__qc__out h5 {
+#plugin__qc__wrapper a h1,
+#plugin__qc__wrapper a h2,
+#plugin__qc__wrapper a h3,
+#plugin__qc__wrapper a h4,
+#plugin__qc__wrapper a h5 {
     margin: 0;
     border: none;
 }
-
-div#plugin__qc__out h1 {
+#plugin__qc__wrapper a h1 {
     margin-bottom: 0.5em;
 }
-
-div#plugin__qc__out h2 {
+#plugin__qc__wrapper a h2 {
     font-weight: bold;
     font-size: 1.3em;
     margin-bottom: 0.5em;
 }
-
-div#plugin__qc__out h3 {
+#plugin__qc__wrapper a h3 {
     font-size: 1em;
-}
-
-div#plugin__qc__out img {
-    margin-left: 3px;
 }
 
 div.dokuwiki img.qc_smallicon {
@@ -76,5 +68,3 @@ div.dokuwiki img.qc_smallicon {
 #plugin__qc_admin .right {
     text-align:right;
 }
-
-

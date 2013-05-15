@@ -1,53 +1,54 @@
-
 /**
- * extend index object function to add quality icons to all pages
+ * Add the QC info to the sitemap
  */
-index.saved_treeattach = index.treeattach;
-index.treeattach = function(obj){
-    if (!obj) return;
-    index.saved_treeattach(obj);
-
-    var items = getElementsByClass('wikilink1',obj,'a');
-    for(var i=0; i<items.length; i++){
-        var elem = items[i];
-
-        var img       = document.createElement('img');
-        img.src       = DOKU_BASE+'lib/plugins/qc/icon.php?id='+elem.title+'&type=small';
-        img.alt       = '';
+function plugin_qc_enhance($data){
+    $data.find('div.li a.wikilink1').each(function(){
+        var $link = jQuery(this);
+        var img = document.createElement('img');
+        img.src = DOKU_BASE + 'lib/plugins/qc/icon.php?id=' + $link.attr('title') + '&type=small';
+        img.alt = '';
         img.className = 'qc_smallicon';
-        elem.parentNode.appendChild(img);
-    }
-};
-
-
-function plugin_qc_toggle(e){
-    var out = $('plugin__qc__out');
-    if(!out) return;
-
-    // extract needed params from the icon src URL
-    var param = e.target.src.split('?');
-
-    // it's shown currently -> disable
-    if(out.style.display != 'none'){
-        out.style.display = 'none';
-        return;
-    }
-
-    // it's not shown currently -> fetch
-    out.innerHTML = 'loading...';
-    out.style.display = '';
-
-    var ajax = new sack(DOKU_BASE + 'lib/plugins/qc/pageinfo.php');
-    ajax.AjaxFailedAlert = '';
-    ajax.encodeURIString = false;
-    ajax.elementObj = out;
-    ajax.runAJAX(param[1]);
-
+        $link.parent().append(img);
+    });
 }
 
-addInitEvent(function(){
-    var icon = $('plugin__qc__icon');
-    if(!icon) return;
-    addEvent(icon,'click',plugin_qc_toggle);
-    icon.style.cursor = 'pointer';
+
+/**
+ * Override the sitemap initialization
+ *
+ * ugly, but currently not differently doable
+ */
+dw_index = jQuery('#index__tree').dw_tree({deferInit: true,
+    load_data: function (show_sublist, $clicky) {
+        jQuery.post(
+            DOKU_BASE + 'lib/exe/ajax.php',
+            $clicky[0].search.substr(1) + '&call=index',
+            function (data) {
+                $data = jQuery(data);
+                plugin_qc_enhance($data);
+                show_sublist($data);
+            },
+            'html'
+        );
+    }
+});
+
+jQuery(function () {
+    // add stuff to the sitemap tree
+    plugin_qc_enhance(jQuery('#index__tree'));
+
+    /**
+     * Open/Close the QC panel
+     */
+    jQuery('#plugin__qc__icon')
+        .css('cursor', 'pointer')
+        .click(function () {
+            var $out = jQuery('#plugin__qc__out');
+            var on = $out.is(':visible');
+            $out.dw_toggle(on, function () {
+                if (off) {
+                    $out.html('loading...').load(jQuery('#plugin__qc__icon').attr('src').split('?'));
+                }
+            });
+        });
 });

@@ -28,6 +28,7 @@ echo '<dt>'.$qc->getLang('g_modified').'</dt>';
 echo '<dd>'.dformat($data['modified']).'</dd>';
 
 // print top 5 authors
+if (!is_array($data['authors'])) $data['authors'] = array();
 arsort($data['authors']);
 $top5 = array_slice($data['authors'],0,5);
 $cnt = count($top5);

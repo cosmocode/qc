@@ -2,7 +2,7 @@
 base   qc
 author Andreas Gohr
 email  gohr@cosmocode.de
-date   2013-05-15
+date   2013-05-28
 name   Quality Control Plugin
 desc   Check the page structure for quality problems
 url    http://www.dokuwiki.org/plugin:qc

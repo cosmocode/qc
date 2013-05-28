@@ -45,9 +45,13 @@ jQuery(function () {
         .click(function () {
             var $out = jQuery('#plugin__qc__out');
             var on = $out.is(':visible');
-            $out.dw_toggle(on, function () {
-                if (off) {
-                    $out.html('loading...').load(jQuery('#plugin__qc__icon').attr('src').split('?'));
+            $out.html('');
+            $out.dw_toggle(!on, function () {
+                if (!on) {
+                    $out.html('loading...').load(
+                        DOKU_BASE+'/lib/plugins/qc/pageinfo.php?' +
+                        jQuery('#plugin__qc__icon').attr('src').split('?')[1]
+                    );
                 }
             });
         });

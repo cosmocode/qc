@@ -48,9 +48,10 @@ jQuery(function () {
             $out.html('');
             $out.dw_toggle(!on, function () {
                 if (!on) {
+                    var url = DOKU_BASE+'/lib/plugins/qc/pageinfo.php?' +
+                              jQuery('#plugin__qc__icon').attr('src').split('?')[1];
                     $out.html('loading...').load(
-                        DOKU_BASE+'/lib/plugins/qc/pageinfo.php?' +
-                        jQuery('#plugin__qc__icon').attr('src').split('?')[1]
+                        url.replace(/^\/+/, '/')
                     );
                 }
             });

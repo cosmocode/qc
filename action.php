@@ -51,6 +51,8 @@ class action_plugin_qc extends DokuWiki_Action_Plugin {
         if ($this->run) return;
 
         global $ID;
+        if(!$ID) return;
+
         $this->run = true;
         echo 'qc data gatherer: started on '.$ID.NL;
         $qc = $this->loadHelper('qc',true);
@@ -83,6 +85,6 @@ class action_plugin_qc extends DokuWiki_Action_Plugin {
      * @return true when everything is alright
      */
     function isOk($arr) {
-        return count(array_filter($arr)) == 0;
+        return count(array_filter((array) $arr)) == 0;
     }
 }

@@ -23,11 +23,19 @@ $lang['i_qcscore']             = 'Kwaliteit:';
 $lang['errorsfound_h']         = 'Geïdentificeerde kwaliteits problemen';
 $lang['errorsfound']           = 'Na analyse van de pagina structuur zijn een aantal problemen omtrent leesbaarheid en bruikbaarheid van de pagina vastgesteld. Neem kennis van de onderstaand constateringen en probeer deze te herstellen. Het betreft een automatisch vervaardigde analyse - je moet zelf bepalen of deze correct is.';
 $lang['fixme_h']               = '%d FIXME(s)';
-$lang['noh1_h']                = 'Geen bovenste kopregel';
+$lang['fixme']                 = 'De pagina bevat markeringen over missende of foutieve inhoud. Je moet de FIXME markeringen vervangen met de correctie inhoud.';
+$lang['noh1_h']                = 'Geen Bovenste kKopregel';
+$lang['noh1']                  = 'Een pagina moet altijd beginnen met een niveau 1 kopregel. Deze kopregel moet het belangrijkste onderwerp van de pagina reflecteren.';
 $lang['manyh1_h']              = '%d Bovenste Kopregels';
+$lang['manyh1']                = 'De pagina bevat meerdere niveau 1 kopregels. Een pagina moet altijd slechts één niveau 1 kopregel bevatten en moet het belangrijkste onderwerp van de pagina reflecteren. Indien de pagina meerdere hoofdonderwerpen bevat, wordt het aanbevolen om de pagina over meerdere pagina\'s te verdelen.';
 $lang['headernest_h']          = 'Foutief geneste secties';
-$lang['manyhr_h']              = 'Veel horizontale liniealen';
+$lang['headernest']            = 'De pagina bevat meerdere secties die sectie niveaus overslaan. Dit beperkt de leesbaarheid en de structuur. Een sectie mag slechts de daarop volgende subsecties bevatten. Overweeg om ontbrekende subsecties toe te voegen of pas bestaande subsecties aan naar het juiste niveau.  ';
+$lang['manyhr_h']              = 'Veel horizontale strepen';
+$lang['manyhr']                = 'De pagina bevat meerdere horizontale strepen (<code>----</code>).
+Horizontale strepen dienen spaarzaam te worden gebruikt omdat zij de leesbaarheid en structuur van een document hinderen. Overweeg daarom secties en paragrafen te gebruiken.';
 $lang['manybr_h']              = 'Veel geforceerd regelafbrekingen';
+$lang['manybr']                = 'De pagina bevat meerdere regelafbrekingen (<code>\\</code>).
+Regelafbrekingen dienen spaarzaam te worden gebruikt omdat zij de leesbaarheid en structuur van een document hinderen. Overweeg daarom paragrafen te gebruiken die de inhoud ondersteunen. Voeg een lege regel in om een paragraaf te vervaardigen.';
 $lang['deepquote_h']           = 'Veelvuldig geneste aanhalingen';
 $lang['singleauthor_h']        = 'Slechts een auteur';
 $lang['toosmall_h']            = 'Erg klein document';

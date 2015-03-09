@@ -105,7 +105,7 @@ function icon_large($pct,$score,$fixmes){
     $w   = imagesx($ico);
     $h   = imagesy($ico);
     imageSaveAlpha($ico, true);
-    imagecopy($img,$ico,$x,4,0,0,$w,$h);
+    imagecopy($img,$ico,$x,($OPTS['height']-$h)/2,0,0,$w,$h);
     imagedestroy($ico);
     $x += $w;
 
@@ -119,7 +119,7 @@ function icon_large($pct,$score,$fixmes){
         $w   = imagesx($ico);
         $h   = imagesy($ico);
         imageSaveAlpha($ico, true);
-        imagecopy($img,$ico,$x,4,0,0,$w,$h);
+        imagecopy($img,$ico,$x,($OPTS['height']-$h)/2,0,0,$w,$h);
         imagedestroy($ico);
         $x += $w;
 

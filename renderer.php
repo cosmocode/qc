@@ -64,7 +64,8 @@ class renderer_plugin_qc extends Doku_Renderer {
         $this->doc['modified'] = $meta['date']['modified'];
 
         // get author info
-        $revs = getRevisions($ID,0,0);
+        $changelog = new PageChangelog($ID);
+        $revs = $changelog->getRevisions(0,10000); //FIXME find a good solution for 'get ALL revisions'
         array_push($revs,$meta['last_change']['date']);
         $this->doc['changes'] = count($revs);
         foreach($revs as $rev){

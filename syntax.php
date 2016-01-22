@@ -34,13 +34,13 @@ class syntax_plugin_qc extends DokuWiki_Syntax_Plugin {
         $this->Lexer->addSpecialPattern('~~NOQC~~',$mode,'plugin_qc');
     }
 
-    function handle($match, $state, $pos, &$handler){
+    function handle($match, $state, $pos, Doku_Handler $handler){
         $data = array();
 
         return $data;
     }
 
-    function render($mode, &$R, $data) {
+    function render($mode, Doku_Renderer $R, $data) {
         if($mode != 'metadata') return false;
 
         $R->meta['relation']['qcplugin_disabled'] = true;

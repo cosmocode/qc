@@ -4,6 +4,8 @@
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * 
  * @author Edmondo Di Tucci <snarchio@gmail.com>
+ * @author Sebastiano Pistore <sebastiano.pistore.info@aol.com>
  */
-$lang['adminonly']             = 'Il Quality Summary è visibile solo agli utenti del gruppo amministratori';
-$lang['single_author_only']    = 'C\'è uno solo o comunque pochi autori';
+$lang['color']                 = 'Colore del testo da utilizzare nell\'anteprima (in esadecimale)';
+$lang['adminonly']             = 'Il Prospetto della qualità è visibile solo agli utenti amministratori';
+$lang['single_author_only']    = 'Ci sono pochi autori.';

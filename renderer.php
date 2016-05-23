@@ -69,7 +69,7 @@ class renderer_plugin_qc extends Doku_Renderer {
         array_push($revs,$meta['last_change']['date']);
         $this->doc['changes'] = count($revs);
         foreach($revs as $rev){
-            $info = getRevisionInfo($ID, $rev);
+            $info = $changelog->getRevisionInfo($rev);
             if($info['user']){
                 $this->doc['authors'][$info['user']] += 1;
             }else{

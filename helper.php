@@ -21,7 +21,7 @@ class helper_plugin_qc extends DokuWiki_Plugin {
             if (!isset($_SERVER['REMOTE_USER']) || !auth_isadmin())
                 return;
         }
-        echo '<div id="plugin__qc__wrapper" data-id="'.$ID.'">';
+        echo '<div id="plugin__qc__wrapper">';
         echo '<img src="'.DOKU_BASE.'lib/plugins/qc/icon.php?id='.$ID.'" width="600" height="25" alt="" id="plugin__qc__icon" />';
         echo '<div id="plugin__qc__out" style="display:none"></div>';
         echo '</div>';

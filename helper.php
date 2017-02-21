@@ -21,12 +21,11 @@ class helper_plugin_qc extends DokuWiki_Plugin {
             if (!isset($_SERVER['REMOTE_USER']) || !auth_isadmin())
                 return;
         }
-        echo '<div id="plugin__qc__wrapper">';
+        echo '<div id="plugin__qc__wrapper" data-id="'.$ID.'">';
         echo '<img src="'.DOKU_BASE.'lib/plugins/qc/icon.php?id='.$ID.'" width="600" height="25" alt="" id="plugin__qc__icon" />';
         echo '<div id="plugin__qc__out" style="display:none"></div>';
         echo '</div>';
     }
-
 
 
     function getQCData($theid){
@@ -37,6 +36,32 @@ class helper_plugin_qc extends DokuWiki_Plugin {
         $data = unserialize(p_cached_output(wikiFN($ID), 'qc', $ID));
         $ID = $oldid;
         return $data;
+    }
+
+    /**
+     * same function as tpl(), built markup contains additional data-attribute data-errors, which shows the current
+     * error count
+     */
+    function tplErrorCount(){
+        global $ACT,$INFO,$ID;
+        if (!function_exists('gd_info')) {
+            msg('You have to install php-gd lib to use the QC plugin.');
+            return;
+        }
+        if($ACT != 'show' || !$INFO['exists']) return;
+        if(p_get_metadata($ID, 'relation qcplugin_disabled')) return;
+        if ($this->getConf('adminonly')) {
+            if (!isset($_SERVER['REMOTE_USER']) || !auth_isadmin())
+                return;
+        }
+        $qc_data =  $this->getQCData($ID);
+        if($qc_data){
+            $num = $qc_data[score];
+        }
+        echo '<div id="plugin__qc__wrapper" data-errors='.$num .'>';
+        echo '<img src="'.DOKU_BASE.'lib/plugins/qc/icon.php?id='.$ID.'" width="600" height="25" alt="" id="plugin__qc__icon" />';
+        echo '<div id="plugin__qc__out"></div>';
+        echo '</div>';
     }
 
 }

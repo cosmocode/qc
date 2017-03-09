@@ -1,18 +1,12 @@
 <?php
 if(!defined('DOKU_INC')) die();
-if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
-if(!defined('DOKU_DATA')) define('DOKU_DATA',DOKU_INC.'data/');
-
-require_once(DOKU_PLUGIN.'action.php');
-require_once(DOKU_INC.'inc/search.php');
-require_once(DOKU_INC.'inc/io.php');
 
 /**
  * QC Cronjob Action Plugin: Clean up the history once per day
  *
  * @author Dominik Eckelmann <dokuwiki@cosmocode.de>
  */
-class action_plugin_qc extends DokuWiki_Action_Plugin {
+class action_plugin_qc_cron extends DokuWiki_Action_Plugin {
 
     /**
      * if true a cleanup process is already running
@@ -47,18 +41,19 @@ class action_plugin_qc extends DokuWiki_Action_Plugin {
      *
      * Scan for fixmes
      */
-    function qccron(&$event, $param) {
-        if ($this->run) return;
+    function qccron(Doku_Event $event, $param) {
+        if($this->run) return;
 
         global $ID;
         if(!$ID) return;
 
         $this->run = true;
-        echo 'qc data gatherer: started on '.$ID.NL;
-        $qc = $this->loadHelper('qc',true);
+        echo 'qc data gatherer: started on ' . $ID . NL;
+        /** @var helper_plugin_qc $qc */
+        $qc = $this->loadHelper('qc', true);
 
         $persist = array();
-        if (is_file($this->file)) {
+        if(is_file($this->file)) {
             $persist = file_get_contents($this->file);
             $persist = unserialize($persist);
         } else {
@@ -69,7 +64,7 @@ class action_plugin_qc extends DokuWiki_Action_Plugin {
         $fixme = $qc->getQCData($ID);
 
         // when there are no quality problems we won't need the information
-        if ($this->isOk($fixme['err'])) {
+        if($this->isOk($fixme['err'])) {
             unset($persist[$ID]);
         } else {
             $persist[$ID] = $fixme;

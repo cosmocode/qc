@@ -4,7 +4,7 @@ jQuery(function () {
     var $wrap = jQuery('#plugin__qc__wrapper');
     if (!$wrap.length) return;
     var $summary = $wrap.find('.summary');
-    var $output = $wrap.find('.output').hide();
+    var $output = $wrap.find('.qc-output').hide();
 
     // autoload the summary
     jQuery.post(

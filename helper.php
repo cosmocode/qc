@@ -18,7 +18,7 @@ class helper_plugin_qc extends DokuWiki_Plugin {
         echo '<div class="summary">';
         echo $this->getLang('i_qcscore');
         echo '</div>';
-        echo '<div class="output"></div>';
+        echo '<div class="qc-output"></div>';
         echo '</div>';
     }
 

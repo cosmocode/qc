@@ -49,7 +49,7 @@ class Output {
         // output icon and score
         $html .= '<span class="qc_icon qc_' . $rating . '">';
         $html .= inlineSVG(__DIR__ . '/svg/' . $rating . '.svg');
-        $html .= '<span>' . $score . '</span>';
+        if($score) $html .= '<span>' . $score . '</span>';
         $html .= '</span>';
 
         return $html;

@@ -22,6 +22,13 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getMenuIcon() {
+        return __DIR__ . '/svg/good.svg';
+    }
+
+    /**
      * handle the request befor html output
      *
      * @see html()

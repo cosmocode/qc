@@ -12,13 +12,7 @@ class helper_plugin_qc extends DokuWiki_Plugin {
      * Output the standard quality header. Needs to be called formt he template
      */
     function tpl() {
-        global $ACT, $INFO, $ID;
-        if($ACT != 'show' || !$INFO['exists']) return;
-        if(p_get_metadata($ID, 'relation qcplugin_disabled')) return;
-        if($this->getConf('adminonly')) {
-            if(!isset($_SERVER['REMOTE_USER']) || !auth_isadmin())
-                return;
-        }
+        if(!$this->shouldShow()) return;
 
         echo '<div id="plugin__qc__wrapper">';
         echo '<div class="summary">';
@@ -26,6 +20,24 @@ class helper_plugin_qc extends DokuWiki_Plugin {
         echo '</div>';
         echo '<div class="output"></div>';
         echo '</div>';
+    }
+
+    /**
+     * Should the QC plugin be shown?
+     *
+     * @return bool
+     */
+    function shouldShow() {
+        global $ACT, $INFO, $ID;
+        if($ACT != 'show' || !$INFO['exists']) return false;
+        if(p_get_metadata($ID, 'relation qcplugin_disabled')) return false;
+        if($this->getConf('adminonly')) {
+            if(!isset($_SERVER['REMOTE_USER']) || !auth_isadmin()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

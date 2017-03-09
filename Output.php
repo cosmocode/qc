@@ -61,7 +61,7 @@ class Output {
      * @return string
      */
     public function short() {
-        return $this->scoreIcon(self::scoreIcon($this->data['score']));
+        return self::scoreIcon($this->data['score']);
     }
 
     /**

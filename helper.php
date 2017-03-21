@@ -11,7 +11,7 @@ class helper_plugin_qc extends DokuWiki_Plugin {
     /**
      * Output the standard quality header. Needs to be called formt he template
      */
-    function tpl() {
+    public function tpl() {
         if(!$this->shouldShow()) return;
 
         echo '<div id="plugin__qc__wrapper">';
@@ -25,12 +25,29 @@ class helper_plugin_qc extends DokuWiki_Plugin {
     /**
      * Should the QC plugin be shown?
      *
+     * It checks if the page exists, if QC was disabled for this page, general
+     * settings and ACLs
+     *
+     * This may be called from page context as well as from AJAX. In AJAX context
+     * the page id needs to be passed as parameter
+     *
+     * @param string $id the page ID, defaults to global $ID
      * @return bool
      */
-    function shouldShow() {
+    public function shouldShow($id='') {
         global $ACT, $INFO, $ID;
-        if($ACT != 'show' || !$INFO['exists']) return false;
-        if(p_get_metadata($ID, 'relation qcplugin_disabled')) return false;
+        if($id === '') $id = $ID;
+        if(isset($ACT) && $ACT != 'show') return false;
+        if(isset($INFO)) {
+            $exists = $INFO['exists'];
+        } else {
+            $exists = page_exists($id);
+        }
+        if(!$exists) return false;
+
+        if(auth_quickaclcheck($id) < AUTH_READ) return false;
+
+        if(p_get_metadata($id, 'relation qcplugin_disabled')) return false;
         if($this->getConf('adminonly')) {
             if(!isset($_SERVER['REMOTE_USER']) || !auth_isadmin()) {
                 return false;
@@ -48,7 +65,7 @@ class helper_plugin_qc extends DokuWiki_Plugin {
      * @param $theid
      * @return array
      */
-    function getQCData($theid) {
+    public function getQCData($theid) {
         global $ID;
         $oldid = $ID;
         $ID = $theid;

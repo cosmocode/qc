@@ -37,6 +37,13 @@ class action_plugin_qc_ajax extends DokuWiki_Action_Plugin {
         $id = cleanID($INPUT->str('id'));
         if(blank($id)) die('no id given');
 
+        /** @var helper_plugin_qc $helper */
+        $helper = plugin_load('helper', 'qc');
+        if(!$helper->shouldShow($id)) {
+            http_status(404, 'No QC data available');
+            exit();
+        }
+
         $out = new Output($id);
         if($event->data == 'plugin_qc_short') {
             echo $out->short();

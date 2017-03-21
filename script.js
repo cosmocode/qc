@@ -1,59 +1,41 @@
-/**
- * Add the QC info to the sitemap
- */
-function plugin_qc_enhance($data){
-    $data.find('div.li a.wikilink1').each(function(){
-        var $link = jQuery(this);
-        var img = document.createElement('img');
-        img.src = DOKU_BASE + 'lib/plugins/qc/icon.php?id=' + $link.attr('title') + '&type=small';
-        img.alt = '';
-        img.className = 'qc_smallicon';
-        $link.parent().append(img);
-    });
-}
-
-
-/**
- * Override the sitemap initialization
- *
- * ugly, but currently not differently doable
- */
-dw_index = jQuery('#index__tree').dw_tree({deferInit: true,
-    load_data: function (show_sublist, $clicky) {
-        jQuery.post(
-            DOKU_BASE + 'lib/exe/ajax.php',
-            $clicky[0].search.substr(1) + '&call=index',
-            function (data) {
-                $data = jQuery(data);
-                plugin_qc_enhance($data);
-                show_sublist($data);
-            },
-            'html'
-        );
-    }
-});
+/* global JSINFO, DOKU_BASE */
 
 jQuery(function () {
-    // add stuff to the sitemap tree
-    plugin_qc_enhance(jQuery('#index__tree'));
+    var $wrap = jQuery('#plugin__qc__wrapper');
+    if (!$wrap.length) return;
+    var $summary = $wrap.find('.summary');
+    var $output = $wrap.find('.qc-output').hide();
 
-    /**
-     * Open/Close the QC panel
-     */
-    jQuery('#plugin__qc__icon')
-        .css('cursor', 'pointer')
-        .click(function () {
-            var $out = jQuery('#plugin__qc__out');
-            var on = $out.is(':visible');
-            $out.html('');
-            $out.dw_toggle(!on, function () {
-                if (!on) {
-                    var url = DOKU_BASE+'/lib/plugins/qc/pageinfo.php?' +
-                              jQuery('#plugin__qc__icon').attr('src').split('?')[1];
-                    $out.html('loading...').load(
-                        url.replace(/^\/+/, '/')
-                    );
+    // autoload the summary
+    jQuery.post(
+        DOKU_BASE + '/lib/exe/ajax.php',
+        {
+            call: 'plugin_qc_short',
+            id: JSINFO['id']
+        },
+        function (data) {
+            $summary.append(data);
+        }
+    );
+
+    // load the full info on click
+    $summary.click(function () {
+        if ($output.html() == '') {
+            $output.html('loading...');
+
+            jQuery.post(
+                DOKU_BASE + '/lib/exe/ajax.php',
+                {
+                    call: 'plugin_qc_long',
+                    id: JSINFO['id']
+                },
+                function (data) {
+                    $output.html(data);
                 }
-            });
-        });
+            );
+        }
+        $output.dw_toggle();
+    })
+        .css('cursor', 'pointer')
+    ;
 });

@@ -1,0 +1,93 @@
+span.qc_icon {
+    line-height: 1.2em;
+    display: inline-block;
+    margin-left: 0.5em;
+    svg {
+        width: 1.2em;
+        height: 1.2em;
+        vertical-align: top;
+    }
+
+    &.qc_bad {
+        fill: #933;
+        color: #933;
+    }
+
+    &.qc_meh {
+        fill: #993;
+        color: #993;
+    }
+
+    &.qc_good {
+        fill: #393;
+        color: #393;
+    }
+}
+
+
+div#plugin__qc__wrapper {
+    background-color: @ini_background_alt;
+    color: @ini_text;
+    border: 1px solid @ini_border;
+    width: 100%;
+    padding: 1px;
+
+    div.summary {
+        font-weight: bold;
+    }
+}
+
+.qc-output {
+    padding: 1em;
+
+    dl dt {
+        float: left;
+        width: 10em;
+        clear: left;
+    }
+
+    div {
+        margin-left: 1em;
+    }
+
+    p {
+        margin-left: 1em;
+    }
+
+    h1, h2, h3, h4, h5 {
+        margin: 0;
+        border: none;
+    }
+
+    h1 {
+        margin-bottom: 0.5em;
+    }
+
+    h2 {
+        font-weight: bold;
+        font-size: 1.3em;
+        margin-bottom: 0.5em;
+    }
+}
+
+#plugin__qc_admin {
+    table {
+        width: 50em;
+
+        td,
+        th {
+            padding: 3px;
+        }
+
+        th.quality,
+        th.fixme {
+            width: 10em;
+        }
+    }
+
+    .right {
+        text-align: right;
+    }
+}
+
+

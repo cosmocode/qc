@@ -1,11 +1,6 @@
 <?php
-if(!defined('DOKU_INC')) define('DOKU_INC',realpath(dirname(__FILE__).'/../../').'/');
-if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
-
-require_once(DOKU_PLUGIN.'admin.php');
-require_once(DOKU_INC.'inc/pageutils.php');
-require_once(DOKU_INC.'inc/io.php');
-require_once(DOKU_INC.'inc/common.php');
+// must be run within Dokuwiki
+if(!defined('DOKU_INC')) die();
 
 /**
  * This plugin is used to display a summery of all FIXME pages
@@ -18,8 +13,20 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin {
     var $data;
     var $order;
 
-    function getMenuSort()      { return 999; }
-    function forAdminOnly()     { return false; }
+    function getMenuSort() {
+        return 999;
+    }
+
+    function forAdminOnly() {
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getMenuIcon() {
+        return __DIR__ . '/svg/good.svg';
+    }
 
     /**
      * handle the request befor html output
@@ -30,19 +37,19 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin {
         global $conf;
 
         // load the quality data
-        if (is_file($conf['tmpdir'].'/qcgather')) {
-            $this->data = file_get_contents($conf['tmpdir'].'/qcgather');
+        if(is_file($conf['tmpdir'] . '/qcgather')) {
+            $this->data = file_get_contents($conf['tmpdir'] . '/qcgather');
             $this->data = unserialize($this->data);
         } else {
             $this->data = array();
         }
 
         // order the data
-        if (!isset($_REQUEST['pluginqc']['order'])) {
+        if(!isset($_REQUEST['pluginqc']['order'])) {
             $_REQUEST['pluginqc']['order'] = 'quality';
         }
 
-        switch ($_REQUEST['pluginqc']['order']) {
+        switch($_REQUEST['pluginqc']['order']) {
             case 'fixme':
                 uasort($this->data, array($this, 'sortFixme'));
                 $this->order = 'fixme';
@@ -59,28 +66,28 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin {
     function html() {
         global $ID;
         $max = $this->getConf('maxshowen');
-        if (!$max || $max <= 0) $max = 25;
+        if(!$max || $max <= 0) $max = 25;
 
         echo '<div id="plugin__qc_admin">';
-        echo '<h1>'.$this->getLang('admin_headline').'</h1>';
+        echo '<h1>' . $this->getLang('admin_headline') . '</h1>';
 
-        echo '<p>'.sprintf($this->getLang('admin_desc'),$max).'</p>';
+        echo '<p>' . sprintf($this->getLang('admin_desc'), $max) . '</p>';
 
         echo '<table class="inline">';
         echo '  <tr>';
-        echo '    <th>'.$this->getLang('admin_page').'</th>';
-        echo '    <th class="quality">'.$this->getOrderArrow('quality').'<a href="'.wl($ID,array('do'=>'admin','page'=>'qc','pluginqc[order]'=>'quality')).'">'.$this->getLang('admin_quality').'</a></th>';
-        echo '    <th class="fixme">'.$this->getOrderArrow('fixme').'<a href="'.wl($ID,array('do'=>'admin','page'=>'qc','pluginqc[order]'=>'fixme')).'">'.$this->getLang('admin_fixme').'</a></th>';
+        echo '    <th>' . $this->getLang('admin_page') . '</th>';
+        echo '    <th class="quality">' . $this->getOrderArrow('quality') . '<a href="' . wl($ID, array('do' => 'admin', 'page' => 'qc', 'pluginqc[order]' => 'quality')) . '">' . $this->getLang('admin_quality') . '</a></th>';
+        echo '    <th class="fixme">' . $this->getOrderArrow('fixme') . '<a href="' . wl($ID, array('do' => 'admin', 'page' => 'qc', 'pluginqc[order]' => 'fixme')) . '">' . $this->getLang('admin_fixme') . '</a></th>';
         echo '  </tr>';
 
-        if ($this->data) {
-            foreach ($this->data as $id => $data) {
-                if ($max == 0) break;
+        if($this->data) {
+            foreach($this->data as $id => $data) {
+                if($max == 0) break;
                 echo '  <tr>';
                 echo '    <td>';
                 tpl_pagelink(':' . $id, $id);
                 echo '</td>';
-                echo '    <td class="centeralign">' . $data['score'] . ' <img src="'. $this->getImgUrl($data['score']) .'" /></td>';
+                echo '    <td class="centeralign">' . \dokuwiki\plugin\qc\Output::scoreIcon($data['score']) . '</td>';
                 echo '    <td class="centeralign">' . $data['err']['fixme'] . '</td>';
                 echo '  </tr>';
                 $max--;
@@ -92,28 +99,15 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin {
     }
 
     function getOrderArrow($type) {
-        if ($type == $this->order) return '&darr; ';
+        if($type == $this->order) return '&darr; ';
         return '';
-    }
-
-    function getImgUrl($score, $return = true) {
-        $maxerr = 10;
-        if ($score > $maxerr) {
-            $ico = DOKU_BASE . 'lib/plugins/qc/pix/'.$this->getConf('theme').'/status_red.png';
-        } elseif($score) {
-            $ico = DOKU_BASE . 'lib/plugins/qc/pix/'.$this->getConf('theme').'/status_yellow.png';
-        } else {
-            $ico = DOKU_BASE . 'lib/plugins/qc/pix/'.$this->getConf('theme').'/status_green.png';
-        }
-        if ($return) return $ico;
-        echo $ico;
     }
 
     /**
      * order by quality
      */
     function sortQuality($a, $b) {
-        if ($a['score'] == $b['score']) return 0;
+        if($a['score'] == $b['score']) return 0;
         return ($a['score'] < $b['score']) ? 1 : -1;
     }
 
@@ -121,7 +115,7 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin {
      * order by fixmes
      */
     function sortFixme($a, $b) {
-        if ($a['err']['fixme'] == $b['err']['fixme']) return 0;
+        if($a['err']['fixme'] == $b['err']['fixme']) return 0;
         return ($a['err']['fixme'] < $b['err']['fixme']) ? 1 : -1;
     }
 

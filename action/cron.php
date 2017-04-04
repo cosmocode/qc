@@ -22,7 +22,7 @@ class action_plugin_qc_cron extends DokuWiki_Action_Plugin {
     /**
      * Constructor - set up some pathes
      */
-    function action_plugin_qc() {
+    function __construct() {
         global $conf;
         $this->file = $conf['tmpdir'] . '/qcgather';
     }

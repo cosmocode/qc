@@ -8,7 +8,7 @@ jQuery(function () {
 
     // autoload the summary
     jQuery.post(
-        DOKU_BASE + '/lib/exe/ajax.php',
+        DOKU_BASE + 'lib/exe/ajax.php',
         {
             call: 'plugin_qc_short',
             id: JSINFO['id']
@@ -24,7 +24,7 @@ jQuery(function () {
             $output.html('loading...');
 
             jQuery.post(
-                DOKU_BASE + '/lib/exe/ajax.php',
+                DOKU_BASE + 'lib/exe/ajax.php',
                 {
                     call: 'plugin_qc_long',
                     id: JSINFO['id']

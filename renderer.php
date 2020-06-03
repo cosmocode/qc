@@ -9,7 +9,7 @@ class renderer_plugin_qc extends Doku_Renderer {
     /**
      * We store all our data in an array
      */
-    var $doc = array(
+    public $docArray = array(
         // raw statistics
         'header_count'  => array(0,0,0,0,0,0),
         'header_struct' => array(),
@@ -48,154 +48,154 @@ class renderer_plugin_qc extends Doku_Renderer {
         ),
     );
 
-    var $quotelevel = 0;
-    var $formatting = 0;
-    var $tableopen  = false;
+    protected $quotelevel = 0;
+    protected $formatting = 0;
+    protected $tableopen  = false;
 
-    function document_start() {
+    public function document_start() {
         global $ID;
         $meta = p_get_metadata($ID);
 
         // get some dates from meta data
-        $this->doc['created']  = $meta['date']['created'];
-        $this->doc['modified'] = $meta['date']['modified'];
+        $this->docArray['created']  = $meta['date']['created'];
+        $this->docArray['modified'] = $meta['date']['modified'];
 
         // get author info
         $changelog = new PageChangelog($ID);
         $revs = $changelog->getRevisions(0,10000); //FIXME find a good solution for 'get ALL revisions'
         array_push($revs,$meta['last_change']['date']);
-        $this->doc['changes'] = count($revs);
+        $this->docArray['changes'] = count($revs);
         foreach($revs as $rev){
             $info = $changelog->getRevisionInfo($rev);
             if($info['user']){
-                $this->doc['authors'][$info['user']] += 1;
+                $this->docArray['authors'][$info['user']] += 1;
             }else{
-                $this->doc['authors']['*'] += 1;
+                $this->docArray['authors']['*'] += 1;
             }
         }
 
         // work on raw text
         $text = rawWiki($ID);
-        $this->doc['chars'] = utf8_strlen($text);
-        $this->doc['words'] = count(array_filter(preg_split('/[^\w\-_]/u',$text)));
+        $this->docArray['chars'] = utf8_strlen($text);
+        $this->docArray['words'] = count(array_filter(preg_split('/[^\w\-_]/u',$text)));
     }
 
 
     /**
      * Here the score is calculated
      */
-    function document_end() {
+    public function document_end() {
         global $ID;
 
         // 2 points for missing backlinks
         if(!count(ft_backlinks($ID))){
-            $this->doc['err']['nobacklink'] += 2;
+            $this->docArray['err']['nobacklink'] += 2;
         }
 
         // 1 point for each FIXME
-        $this->doc['err']['fixme'] += $this->doc['fixme'];
+        $this->docArray['err']['fixme'] += $this->docArray['fixme'];
 
         // 5 points for missing H1
-        if($this->doc['header_count'][1] == 0){
-            $this->doc['err']['noh1'] += 5;
+        if($this->docArray['header_count'][1] == 0){
+            $this->docArray['err']['noh1'] += 5;
         }
         // 1 point for each H1 too much
-        if($this->doc['header_count'][1] > 1){
-            $this->doc['err']['manyh1'] += $this->doc['header'][1];
+        if($this->docArray['header_count'][1] > 1){
+            $this->docArray['err']['manyh1'] += $this->docArray['header'][1];
         }
 
         // 1 point for each incorrectly nested headline
-        $cnt = count($this->doc['header_struct']);
+        $cnt = count($this->docArray['header_struct']);
         for($i = 1; $i < $cnt; $i++){
-            if($this->doc['header_struct'][$i] - $this->doc['header_struct'][$i-1] > 1){
-                $this->doc['err']['headernest'] += 1;
+            if($this->docArray['header_struct'][$i] - $this->docArray['header_struct'][$i-1] > 1){
+                $this->docArray['err']['headernest'] += 1;
             }
         }
 
         // 1/2 points for deeply nested quotations
-        if($this->doc['quote_nest'] > 2){
-            $this->doc['err']['deepquote'] += $this->doc['quote_nest']/2;
+        if($this->docArray['quote_nest'] > 2){
+            $this->docArray['err']['deepquote'] += $this->docArray['quote_nest']/2;
         }
 
         // FIXME points for many quotes?
 
         // 1/2 points for too many hr
-        if($this->doc['hr'] > 2){
-            $this->doc['err']['manyhr'] = ($this->doc['hr'] - 2)/2;
+        if($this->docArray['hr'] > 2){
+            $this->docArray['err']['manyhr'] = ($this->docArray['hr'] - 2)/2;
         }
 
         // 1 point for too many line breaks
-        if($this->doc['linebreak'] > 2){
-            $this->doc['err']['manybr'] = $this->doc['linebreak'] - 2;
+        if($this->docArray['linebreak'] > 2){
+            $this->docArray['err']['manybr'] = $this->docArray['linebreak'] - 2;
         }
 
         // 1 point for single author only
-        if(!$this->getConf('single_author_only') && count($this->doc['authors']) == 1){
-            $this->doc['err']['singleauthor'] = 1;
+        if(!$this->getConf('single_author_only') && count($this->docArray['authors']) == 1){
+            $this->docArray['err']['singleauthor'] = 1;
         }
 
         // 1 point for too small document
-        if($this->doc['chars'] < 150){
-            $this->doc['err']['toosmall'] = 1;
+        if($this->docArray['chars'] < 150){
+            $this->docArray['err']['toosmall'] = 1;
         }
 
         // 1 point for too large document
-        if($this->doc['chars'] > 100000){
-            $this->doc['err']['toolarge'] = 1;
+        if($this->docArray['chars'] > 100000){
+            $this->docArray['err']['toolarge'] = 1;
         }
 
         // header to text ratio
-        $hc = $this->doc['header_count'][1] +
-              $this->doc['header_count'][2] +
-              $this->doc['header_count'][3] +
-              $this->doc['header_count'][4] +
-              $this->doc['header_count'][5];
+        $hc = $this->docArray['header_count'][1] +
+              $this->docArray['header_count'][2] +
+              $this->docArray['header_count'][3] +
+              $this->docArray['header_count'][4] +
+              $this->docArray['header_count'][5];
         $hc--; //we expect at least 1
         if($hc > 0){
-            $hr = $this->doc['chars']/$hc;
+            $hr = $this->docArray['chars']/$hc;
 
             // 1 point for too many headers
             if($hr < 200){
-                $this->doc['err']['manyheaders'] = 1;
+                $this->docArray['err']['manyheaders'] = 1;
             }
 
             // 1 point for too few headers
             if($hr > 2000){
-                $this->doc['err']['fewheaders'] = 1;
+                $this->docArray['err']['fewheaders'] = 1;
             }
         }
 
         // 1 point when no link at all
-        if(!$this->doc['internal_links']){
-            $this->doc['err']['nolink'] = 1;
+        if(!$this->docArray['internal_links']){
+            $this->docArray['err']['nolink'] = 1;
         }
 
         // 0.5 for broken links when too many
-        if($this->doc['broken_links'] > 2){
-            $this->doc['err']['brokenlink'] = $this->doc['broken_links']*0.5;
+        if($this->docArray['broken_links'] > 2){
+            $this->docArray['err']['brokenlink'] = $this->docArray['broken_links']*0.5;
         }
 
         // 2 points for lot's of formatting
-        if($this->doc['formatted'] && $this->doc['chars']/$this->doc['formatted'] < 3){
-            $this->doc['err']['manyformat'] = 2;
+        if($this->docArray['formatted'] && $this->docArray['chars']/$this->docArray['formatted'] < 3){
+            $this->docArray['err']['manyformat'] = 2;
         }
 
         // add up all scores
-        foreach($this->doc['err'] as $err => $val) $this->doc['score'] += $val;
+        foreach($this->docArray['err'] as $err => $val) $this->docArray['score'] += $val;
 
 
         //we're done here
-        $this->doc = serialize($this->doc);
+        $this->doc = serialize($this->docArray);
     }
 
     /**
      * the format we produce
      */
-    function getFormat(){
+    public function getFormat(){
         return 'qc';
     }
 
-    function internallink($id, $name = NULL, $search=NULL,$returnonly=false,$linktype='content') {
+    public function internallink($id, $name = NULL, $search=NULL,$returnonly=false,$linktype='content') {
         global $ID;
         resolve_pageid(getNS($ID),$id,$exists);
 
@@ -207,89 +207,89 @@ class renderer_plugin_qc extends Doku_Renderer {
             array_shift($b);
         }
         $length = count($a)+count($b);
-        $this->doc['link_lengths'][] = $length;
+        $this->docArray['link_lengths'][] = $length;
 
-        $this->doc['internal_links']++;
-        if(!$exists) $this->doc['broken_links']++;
+        $this->docArray['internal_links']++;
+        if(!$exists) $this->docArray['broken_links']++;
     }
 
-    function externallink($url, $name = NULL) {
-        $this->doc['external_links']++;
+    public function externallink($url, $name = NULL) {
+        $this->docArray['external_links']++;
     }
 
-    function header($text, $level, $pos){
-        $this->doc['header_count'][$level]++;
-        $this->doc['header_struct'][] = $level;
+    public function header($text, $level, $pos){
+        $this->docArray['header_count'][$level]++;
+        $this->docArray['header_struct'][] = $level;
     }
 
-    function smiley($smiley) {
-        if($smiley == 'FIXME') $this->doc['fixme']++;
+    public function smiley($smiley) {
+        if($smiley == 'FIXME') $this->docArray['fixme']++;
     }
 
-    function linebreak() {
+    public function linebreak() {
         if(!$this->tableopen){
-            $this->doc['linebreak']++;
+            $this->docArray['linebreak']++;
         }
     }
 
-    function table_open($maxcols = null, $numrows = null, $pos = null){
+    public function table_open($maxcols = null, $numrows = null, $pos = null){
         $this->tableopen = true;
     }
 
-    function table_close($pos = null){
+    public function table_close($pos = null){
         $this->tableopen = false;
     }
 
-    function hr() {
-        $this->doc['hr']++;
+    public function hr() {
+        $this->docArray['hr']++;
     }
 
-    function quote_open() {
-        $this->doc['quote_count']++;
+    public function quote_open() {
+        $this->docArray['quote_count']++;
         $this->quotelevel++;
-        $this->doc['quote_nest'] = max($this->quotelevel,$this->doc['quote_nest']);
+        $this->docArray['quote_nest'] = max($this->quotelevel,$this->docArray['quote_nest']);
     }
 
-    function quote_close() {
+    public function quote_close() {
         $this->quotelevel--;
     }
 
-    function strong_open() {
+    public function strong_open() {
         $this->formatting++;
     }
 
-    function strong_close() {
+    public function strong_close() {
         $this->formatting--;
     }
 
-    function emphasis_open() {
+    public function emphasis_open() {
         $this->formatting++;
     }
 
-    function emphasis_close() {
+    public function emphasis_close() {
         $this->formatting--;
     }
 
-    function underline_open() {
+    public function underline_open() {
         $this->formatting++;
     }
 
-    function underline_close() {
+    public function underline_close() {
         $this->formatting--;
     }
 
-    function cdata($text) {
+    public function cdata($text) {
         if(!$this->formatting) return;
 
         $len = utf8_strlen($text);
 
         // 1 point for formattings longer than 500 chars
-        if($len>500) $this->doc['err']['longformat']++;
+        if($len>500) $this->docArray['err']['longformat']++;
 
         // 1 point for each multiformatting
-        if($this->formatting > 1) $this->doc['err']['multiformat'] += 1*($this->formatting - 1);
+        if($this->formatting > 1) $this->docArray['err']['multiformat'] += 1*($this->formatting - 1);
 
-        $this->doc['formatted'] += $len;
+        $this->docArray['formatted'] += $len;
     }
 }
 

@@ -7,9 +7,6 @@
  * @author  Andreas Gohr <gohr@cosmocode.de>
  */
 
-// must be run within Dokuwiki
-if (!defined('DOKU_INC')) die();
-
 use dokuwiki\plugin\qc\Output;
 
 class action_plugin_qc_ajax extends DokuWiki_Action_Plugin

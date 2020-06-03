@@ -1,8 +1,5 @@
 <?php
 
-// must be run within Dokuwiki
-if (!defined('DOKU_INC')) die();
-
 /**
  * This plugin is used to display a summery of all FIXME pages
  *
@@ -11,16 +8,15 @@ if (!defined('DOKU_INC')) die();
  */
 class admin_plugin_qc extends DokuWiki_Admin_Plugin
 {
+    protected $data;
+    protected $order;
 
-    var $data;
-    var $order;
-
-    function getMenuSort()
+    public function getMenuSort()
     {
         return 999;
     }
 
-    function forAdminOnly()
+    public function forAdminOnly()
     {
         return false;
     }
@@ -38,7 +34,7 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin
      *
      * @see html()
      */
-    function handle()
+    public function handle()
     {
         global $conf;
 
@@ -69,7 +65,7 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin
     /**
      * output html for the admin page
      */
-    function html()
+    public function html()
     {
         global $ID;
         $max = $this->getConf('maxshowen');
@@ -105,7 +101,7 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin
         echo '</div>';
     }
 
-    function getOrderArrow($type)
+    protected function getOrderArrow($type)
     {
         if ($type == $this->order) return '&darr; ';
         return '';
@@ -114,7 +110,7 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin
     /**
      * order by quality
      */
-    function sortQuality($a, $b)
+    protected function sortQuality($a, $b)
     {
         if ($a['score'] == $b['score']) return 0;
         return ($a['score'] < $b['score']) ? 1 : -1;
@@ -123,7 +119,7 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin
     /**
      * order by fixmes
      */
-    function sortFixme($a, $b)
+    protected function sortFixme($a, $b)
     {
         if ($a['err']['fixme'] == $b['err']['fixme']) return 0;
         return ($a['err']['fixme'] < $b['err']['fixme']) ? 1 : -1;

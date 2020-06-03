@@ -1,8 +1,5 @@
 <?php
 
-// must be run within Dokuwiki
-if (!defined('DOKU_INC')) die();
-
 /**
  * The Renderer
  */
@@ -54,7 +51,7 @@ class renderer_plugin_qc extends Doku_Renderer
     protected $formatting = 0;
     protected $tableopen  = false;
 
-    public function document_start()
+    public function document_start() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         global $ID;
         $meta = p_get_metadata($ID);
@@ -87,7 +84,7 @@ class renderer_plugin_qc extends Doku_Renderer
     /**
      * Here the score is calculated
      */
-    public function document_end()
+    public function document_end() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         global $ID;
 
@@ -242,12 +239,12 @@ class renderer_plugin_qc extends Doku_Renderer
         }
     }
 
-    public function table_open($maxcols = null, $numrows = null, $pos = null)
+    public function table_open($maxcols = null, $numrows = null, $pos = null) // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->tableopen = true;
     }
 
-    public function table_close($pos = null)
+    public function table_close($pos = null) // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->tableopen = false;
     }
@@ -257,44 +254,44 @@ class renderer_plugin_qc extends Doku_Renderer
         $this->docArray['hr']++;
     }
 
-    public function quote_open()
+    public function quote_open() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->docArray['quote_count']++;
         $this->quotelevel++;
         $this->docArray['quote_nest'] = max($this->quotelevel, $this->docArray['quote_nest']);
     }
 
-    public function quote_close()
+    public function quote_close() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->quotelevel--;
     }
 
-    public function strong_open()
+    public function strong_open() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->formatting++;
     }
 
-    public function strong_close()
+    public function strong_close() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->formatting--;
     }
 
-    public function emphasis_open()
+    public function emphasis_open() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->formatting++;
     }
 
-    public function emphasis_close()
+    public function emphasis_close() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->formatting--;
     }
 
-    public function underline_open()
+    public function underline_open() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->formatting++;
     }
 
-    public function underline_close()
+    public function underline_close() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->formatting--;
     }

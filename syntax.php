@@ -19,35 +19,35 @@ require_once(DOKU_PLUGIN . 'syntax.php');
 class syntax_plugin_qc extends DokuWiki_Syntax_Plugin
 {
 
-    function getType()
+    public function getType()
     {
         return 'substition';
     }
 
-    function getPType()
+    public function getPType()
     {
         return 'normal';
     }
 
-    function getSort()
+    public function getSort()
     {
         return 150;
     }
 
 
-    function connectTo($mode)
+    public function connectTo($mode)
     {
         $this->Lexer->addSpecialPattern('~~NOQC~~', $mode, 'plugin_qc');
     }
 
-    function handle($match, $state, $pos, Doku_Handler $handler)
+    public function handle($match, $state, $pos, Doku_Handler $handler)
     {
         $data = array();
 
         return $data;
     }
 
-    function render($mode, Doku_Renderer $R, $data)
+    public function render($mode, Doku_Renderer $R, $data)
     {
         if ($mode != 'metadata') return false;
 

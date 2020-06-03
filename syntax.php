@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DokuWiki Plugin qc (Syntax Component)
  *
@@ -11,37 +12,44 @@ if (!defined('DOKU_INC')) die();
 
 if (!defined('DOKU_LF')) define('DOKU_LF', "\n");
 if (!defined('DOKU_TAB')) define('DOKU_TAB', "\t");
-if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
+if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC . 'lib/plugins/');
 
-require_once(DOKU_PLUGIN.'syntax.php');
+require_once(DOKU_PLUGIN . 'syntax.php');
 
-class syntax_plugin_qc extends DokuWiki_Syntax_Plugin {
+class syntax_plugin_qc extends DokuWiki_Syntax_Plugin
+{
 
-    function getType() {
+    public function getType()
+    {
         return 'substition';
     }
 
-    function getPType() {
+    public function getPType()
+    {
         return 'normal';
     }
 
-    function getSort() {
+    public function getSort()
+    {
         return 150;
     }
 
 
-    function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('~~NOQC~~',$mode,'plugin_qc');
+    public function connectTo($mode)
+    {
+        $this->Lexer->addSpecialPattern('~~NOQC~~', $mode, 'plugin_qc');
     }
 
-    function handle($match, $state, $pos, Doku_Handler $handler){
+    public function handle($match, $state, $pos, Doku_Handler $handler)
+    {
         $data = array();
 
         return $data;
     }
 
-    function render($mode, Doku_Renderer $R, $data) {
-        if($mode != 'metadata') return false;
+    public function render($mode, Doku_Renderer $R, $data)
+    {
+        if ($mode != 'metadata') return false;
 
         $R->meta['relation']['qcplugin_disabled'] = true;
         return true;

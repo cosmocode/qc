@@ -1,6 +1,4 @@
 <?php
-// must be run within Dokuwiki
-if(!defined('DOKU_INC')) die();
 
 /**
  * This plugin is used to display a summery of all FIXME pages
@@ -8,23 +6,26 @@ if(!defined('DOKU_INC')) die();
  * @see http://dokuwiki.org/plugin:qc
  * @author Dominik Eckelmann <dokuwiki@cosmocode.de>
  */
-class admin_plugin_qc extends DokuWiki_Admin_Plugin {
+class admin_plugin_qc extends DokuWiki_Admin_Plugin
+{
+    protected $data;
+    protected $order;
 
-    var $data;
-    var $order;
-
-    function getMenuSort() {
+    public function getMenuSort()
+    {
         return 999;
     }
 
-    function forAdminOnly() {
+    public function forAdminOnly()
+    {
         return false;
     }
 
     /**
      * @inheritDoc
      */
-    public function getMenuIcon() {
+    public function getMenuIcon()
+    {
         return __DIR__ . '/svg/good.svg';
     }
 
@@ -33,11 +34,12 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin {
      *
      * @see html()
      */
-    function handle() {
+    public function handle()
+    {
         global $conf;
 
         // load the quality data
-        if(is_file($conf['tmpdir'] . '/qcgather')) {
+        if (is_file($conf['tmpdir'] . '/qcgather')) {
             $this->data = file_get_contents($conf['tmpdir'] . '/qcgather');
             $this->data = unserialize($this->data);
         } else {
@@ -45,11 +47,11 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin {
         }
 
         // order the data
-        if(!isset($_REQUEST['pluginqc']['order'])) {
+        if (!isset($_REQUEST['pluginqc']['order'])) {
             $_REQUEST['pluginqc']['order'] = 'quality';
         }
 
-        switch($_REQUEST['pluginqc']['order']) {
+        switch ($_REQUEST['pluginqc']['order']) {
             case 'fixme':
                 uasort($this->data, array($this, 'sortFixme'));
                 $this->order = 'fixme';
@@ -63,10 +65,11 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin {
     /**
      * output html for the admin page
      */
-    function html() {
+    public function html()
+    {
         global $ID;
         $max = $this->getConf('maxshowen');
-        if(!$max || $max <= 0) $max = 25;
+        if (!$max || $max <= 0) $max = 25;
 
         echo '<div id="plugin__qc_admin">';
         echo '<h1>' . $this->getLang('admin_headline') . '</h1>';
@@ -80,9 +83,9 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin {
         echo '    <th class="fixme">' . $this->getOrderArrow('fixme') . '<a href="' . wl($ID, array('do' => 'admin', 'page' => 'qc', 'pluginqc[order]' => 'fixme')) . '">' . $this->getLang('admin_fixme') . '</a></th>';
         echo '  </tr>';
 
-        if($this->data) {
-            foreach($this->data as $id => $data) {
-                if($max == 0) break;
+        if ($this->data) {
+            foreach ($this->data as $id => $data) {
+                if ($max == 0) break;
                 echo '  <tr>';
                 echo '    <td>';
                 tpl_pagelink(':' . $id, $id);
@@ -98,27 +101,27 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin {
         echo '</div>';
     }
 
-    function getOrderArrow($type) {
-        if($type == $this->order) return '&darr; ';
+    protected function getOrderArrow($type)
+    {
+        if ($type == $this->order) return '&darr; ';
         return '';
     }
 
     /**
      * order by quality
      */
-    function sortQuality($a, $b) {
-        if($a['score'] == $b['score']) return 0;
+    protected function sortQuality($a, $b)
+    {
+        if ($a['score'] == $b['score']) return 0;
         return ($a['score'] < $b['score']) ? 1 : -1;
     }
 
     /**
      * order by fixmes
      */
-    function sortFixme($a, $b) {
-        if($a['err']['fixme'] == $b['err']['fixme']) return 0;
+    protected function sortFixme($a, $b)
+    {
+        if ($a['err']['fixme'] == $b['err']['fixme']) return 0;
         return ($a['err']['fixme'] < $b['err']['fixme']) ? 1 : -1;
     }
-
 }
-
-?>

@@ -1,18 +1,21 @@
 <?php
+
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  */
 
 // must be run within Dokuwiki
-if(!defined('DOKU_INC')) die();
+if (!defined('DOKU_INC')) die();
 
-class helper_plugin_qc extends DokuWiki_Plugin {
+class helper_plugin_qc extends DokuWiki_Plugin
+{
 
     /**
      * Output the standard quality header. Needs to be called formt he template
      */
-    public function tpl() {
-        if(!$this->shouldShow()) return;
+    public function tpl()
+    {
+        if (!$this->shouldShow()) return;
 
         echo '<div id="plugin__qc__wrapper">';
         echo '<div class="summary">';
@@ -34,22 +37,23 @@ class helper_plugin_qc extends DokuWiki_Plugin {
      * @param string $id the page ID, defaults to global $ID
      * @return bool
      */
-    public function shouldShow($id='') {
+    public function shouldShow($id = '')
+    {
         global $ACT, $INFO, $ID;
-        if($id === '') $id = $ID;
-        if(isset($ACT) && $ACT != 'show') return false;
-        if(isset($INFO)) {
+        if ($id === '') $id = $ID;
+        if (isset($ACT) && $ACT != 'show') return false;
+        if (isset($INFO)) {
             $exists = $INFO['exists'];
         } else {
             $exists = page_exists($id);
         }
-        if(!$exists) return false;
+        if (!$exists) return false;
 
-        if(auth_quickaclcheck($id) < AUTH_READ) return false;
+        if (auth_quickaclcheck($id) < AUTH_READ) return false;
 
-        if(p_get_metadata($id, 'relation qcplugin_disabled')) return false;
-        if($this->getConf('adminonly')) {
-            if(!isset($_SERVER['REMOTE_USER']) || !auth_isadmin()) {
+        if (p_get_metadata($id, 'relation qcplugin_disabled')) return false;
+        if ($this->getConf('adminonly')) {
+            if (!isset($_SERVER['REMOTE_USER']) || !auth_isadmin()) {
                 return false;
             }
         }
@@ -65,7 +69,8 @@ class helper_plugin_qc extends DokuWiki_Plugin {
      * @param $theid
      * @return array
      */
-    public function getQCData($theid) {
+    public function getQCData($theid)
+    {
         global $ID;
         $oldid = $ID;
         $ID = $theid;

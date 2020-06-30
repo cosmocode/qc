@@ -43,7 +43,7 @@ class action_plugin_qc_cron extends DokuWiki_Action_Plugin
      *
      * Scan for fixmes
      */
-    protected function qccron(Doku_Event $event, $param)
+    public function qccron(Doku_Event $event, $param)
     {
         if ($this->run) return;
 

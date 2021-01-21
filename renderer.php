@@ -25,8 +25,10 @@ class renderer_plugin_qc extends Doku_Renderer
         'authors'       => array(),
 
         'internal_links' => 0,
+        'internal_medias' => 0,
         'broken_links'  => 0,
         'external_links' => 0,
+        'external_medias' => 0,
         'link_lengths'  => array(),
 
         'chars'         => 0,
@@ -310,6 +312,19 @@ class renderer_plugin_qc extends Doku_Renderer
 
         $this->docArray['formatted'] += $len;
     }
+
+    public function internalmedia($src, $title = null, $align = null, $width = null, $height = null, $cache = null, $linking = null)
+    {
+        $this->docArray['internal_medias']++;
+    }
+
+    public function externalmedia($src, $title = null, $align = null, $width = null, $height = null, $cache = null, $linking = null)
+    {
+        $this->docArray['external_medias']++;
+    }
+
+
+
 }
 
 //Setup VIM: ex: et ts=4 enc=utf-8 :

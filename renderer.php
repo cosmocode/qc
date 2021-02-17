@@ -59,6 +59,7 @@ class renderer_plugin_qc extends Doku_Renderer
         // get some dates from meta data
         $this->docArray['created']  = $meta['date']['created'];
         $this->docArray['modified'] = $meta['date']['modified'];
+        $this->docArray['authors']['*'] = 0;
 
         // get author info
         $changelog = new PageChangelog($ID);
@@ -68,7 +69,10 @@ class renderer_plugin_qc extends Doku_Renderer
         foreach ($revs as $rev) {
             $info = $changelog->getRevisionInfo($rev);
             if ($info['user']) {
-                $this->docArray['authors'][$info['user']] += 1;
+                $authorUserCnt = !empty($this->docArray['authors'][$info['user']])
+                    ? $this->docArray['authors'][$info['user']]
+                    : 0;
+                $this->docArray['authors'][$info['user']] = $authorUserCnt + 1;
             } else {
                 $this->docArray['authors']['*'] += 1;
             }

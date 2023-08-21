@@ -1,5 +1,7 @@
 <?php
 
+use dokuwiki\Utf8\PhpString;
+
 /**
  * The Renderer
  */
@@ -10,38 +12,38 @@ class renderer_plugin_qc extends Doku_Renderer
      */
     public $docArray = array(
         // raw statistics
-        'header_count'  => array(0,0,0,0,0,0),
+        'header_count' => array(0, 0, 0, 0, 0, 0),
         'header_struct' => array(),
-        'linebreak'     => 0,
-        'quote_nest'    => 0,
-        'quote_count'   => 0,
-        'fixme'         => 0,
-        'hr'            => 0,
-        'formatted'     => 0,
+        'linebreak' => 0,
+        'quote_nest' => 0,
+        'quote_count' => 0,
+        'fixme' => 0,
+        'hr' => 0,
+        'formatted' => 0,
 
-        'created'       => 0,
-        'modified'      => 0,
-        'changes'       => 0,
-        'authors'       => array(),
+        'created' => 0,
+        'modified' => 0,
+        'changes' => 0,
+        'authors' => array(),
 
         'internal_links' => 0,
-        'broken_links'  => 0,
+        'broken_links' => 0,
         'external_links' => 0,
-        'link_lengths'  => array(),
+        'link_lengths' => array(),
 
-        'chars'         => 0,
-        'words'         => 0,
+        'chars' => 0,
+        'words' => 0,
 
-        'score'         => 0,
+        'score' => 0,
 
         // calculated error scores
         'err' => array(
-            'fixme'      => 0,
-            'noh1'       => 0,
-            'manyh1'     => 0,
+            'fixme' => 0,
+            'noh1' => 0,
+            'manyh1' => 0,
             'headernest' => 0,
-            'manyhr'     => 0,
-            'manybr'     => 0,
+            'manyhr' => 0,
+            'manybr' => 0,
             'longformat' => 0,
             'multiformat' => 0,
         ),
@@ -49,26 +51,27 @@ class renderer_plugin_qc extends Doku_Renderer
 
     protected $quotelevel = 0;
     protected $formatting = 0;
-    protected $tableopen  = false;
+    protected $tableopen = false;
 
+    /** @inheritdoc */
     public function document_start() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         global $ID;
         $meta = p_get_metadata($ID);
 
         // get some dates from meta data
-        $this->docArray['created']  = $meta['date']['created'];
+        $this->docArray['created'] = $meta['date']['created'];
         $this->docArray['modified'] = $meta['date']['modified'];
         $this->docArray['authors']['*'] = 0;
 
         // get author info
-        $changelog = new PageChangelog($ID);
+        $changelog = new \dokuwiki\ChangeLog\PageChangeLog($ID);
         $revs = $changelog->getRevisions(0, 10000); //FIXME find a good solution for 'get ALL revisions'
-        array_push($revs, $meta['last_change']['date']);
+        $revs[] = $meta['last_change']['date'];
         $this->docArray['changes'] = count($revs);
         foreach ($revs as $rev) {
             $info = $changelog->getRevisionInfo($rev);
-            if ($info['user']) {
+            if ($info && !empty($info['user'])) {
                 $authorUserCnt = !empty($this->docArray['authors'][$info['user']])
                     ? $this->docArray['authors'][$info['user']]
                     : 0;
@@ -87,6 +90,7 @@ class renderer_plugin_qc extends Doku_Renderer
 
     /**
      * Here the score is calculated
+     * @inheritdoc
      */
     public function document_end() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
@@ -151,10 +155,10 @@ class renderer_plugin_qc extends Doku_Renderer
 
         // header to text ratio
         $hc = $this->docArray['header_count'][1] +
-              $this->docArray['header_count'][2] +
-              $this->docArray['header_count'][3] +
-              $this->docArray['header_count'][4] +
-              $this->docArray['header_count'][5];
+            $this->docArray['header_count'][2] +
+            $this->docArray['header_count'][3] +
+            $this->docArray['header_count'][4] +
+            $this->docArray['header_count'][5];
         $hc--; //we expect at least 1
         if ($hc > 0) {
             $hr = $this->docArray['chars'] / $hc;
@@ -193,18 +197,20 @@ class renderer_plugin_qc extends Doku_Renderer
         $this->doc = serialize($this->docArray);
     }
 
-    /**
-     * the format we produce
-     */
+    /** @inheritdoc */
     public function getFormat()
     {
         return 'qc';
     }
 
+    /** @inheritdoc */
     public function internallink($id, $name = null, $search = null, $returnonly = false, $linktype = 'content')
     {
         global $ID;
-        resolve_pageid(getNS($ID), $id, $exists);
+
+        $resolver = new \dokuwiki\File\PageResolver($ID);
+        $id = $resolver->resolveId($id);
+        $exists = page_exists($id);
 
         // calculate link width
         $a = explode(':', getNS($ID));
@@ -220,22 +226,26 @@ class renderer_plugin_qc extends Doku_Renderer
         if (!$exists) $this->docArray['broken_links']++;
     }
 
+    /** @inheritdoc */
     public function externallink($url, $name = null)
     {
         $this->docArray['external_links']++;
     }
 
+    /** @inheritdoc */
     public function header($text, $level, $pos)
     {
         $this->docArray['header_count'][$level]++;
         $this->docArray['header_struct'][] = $level;
     }
 
+    /** @inheritdoc */
     public function smiley($smiley)
     {
         if ($smiley == 'FIXME') $this->docArray['fixme']++;
     }
 
+    /** @inheritdoc */
     public function linebreak()
     {
         if (!$this->tableopen) {
@@ -243,21 +253,25 @@ class renderer_plugin_qc extends Doku_Renderer
         }
     }
 
+    /** @inheritdoc */
     public function table_open($maxcols = null, $numrows = null, $pos = null) // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->tableopen = true;
     }
 
+    /** @inheritdoc */
     public function table_close($pos = null) // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->tableopen = false;
     }
 
+    /** @inheritdoc */
     public function hr()
     {
         $this->docArray['hr']++;
     }
 
+    /** @inheritdoc */
     public function quote_open() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->docArray['quote_count']++;
@@ -265,46 +279,54 @@ class renderer_plugin_qc extends Doku_Renderer
         $this->docArray['quote_nest'] = max($this->quotelevel, $this->docArray['quote_nest']);
     }
 
+    /** @inheritdoc */
     public function quote_close() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->quotelevel--;
     }
 
+    /** @inheritdoc */
     public function strong_open() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->formatting++;
     }
 
+    /** @inheritdoc */
     public function strong_close() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->formatting--;
     }
 
+    /** @inheritdoc */
     public function emphasis_open() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->formatting++;
     }
 
+    /** @inheritdoc */
     public function emphasis_close() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->formatting--;
     }
 
+    /** @inheritdoc */
     public function underline_open() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->formatting++;
     }
 
+    /** @inheritdoc */
     public function underline_close() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     {
         $this->formatting--;
     }
 
+    /** @inheritdoc */
     public function cdata($text)
     {
         if (!$this->formatting) return;
 
-        $len = utf8_strlen($text);
+        $len = PhpString::strlen($text);
 
         // 1 point for formattings longer than 500 chars
         if ($len > 500) $this->docArray['err']['longformat']++;
@@ -315,5 +337,3 @@ class renderer_plugin_qc extends Doku_Renderer
         $this->docArray['formatted'] += $len;
     }
 }
-
-//Setup VIM: ex: et ts=4 enc=utf-8 :

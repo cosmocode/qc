@@ -11,29 +11,19 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin
     protected $data;
     protected $order;
 
-    public function getMenuSort()
-    {
-        return 999;
-    }
-
+    /** @inheritdoc */
     public function forAdminOnly()
     {
         return false;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function getMenuIcon()
     {
         return __DIR__ . '/svg/good.svg';
     }
 
-    /**
-     * handle the request befor html output
-     *
-     * @see html()
-     */
+    /** @inheritdoc */
     public function handle()
     {
         global $conf;
@@ -62,9 +52,7 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin
         }
     }
 
-    /**
-     * output html for the admin page
-     */
+    /** @inheritdoc */
     public function html()
     {
         global $ID;
@@ -101,6 +89,11 @@ class admin_plugin_qc extends DokuWiki_Admin_Plugin
         echo '</div>';
     }
 
+    /**
+     * return an arrow if currently sorted by this type
+     *
+     * @ return string
+     */
     protected function getOrderArrow($type)
     {
         if ($type == $this->order) return '&darr; ';

@@ -53,14 +53,13 @@ class action_plugin_qc_cron extends DokuWiki_Action_Plugin
         $this->run = true;
         echo 'qc data gatherer: started on ' . $ID . NL;
         /** @var helper_plugin_qc $qc */
-        $qc = $this->loadHelper('qc', true);
+        $qc = $this->loadHelper('qc');
 
-        $persist = array();
+        $persist = [];
         if (is_file($this->file)) {
             $persist = file_get_contents($this->file);
             $persist = unserialize($persist);
         } else {
-            $persist = array();
             echo '2';
         }
 
@@ -84,6 +83,6 @@ class action_plugin_qc_cron extends DokuWiki_Action_Plugin
      */
     protected function isOk($arr)
     {
-        return count(array_filter((array) $arr)) == 0;
+        return count(array_filter((array)$arr)) == 0;
     }
 }

@@ -1,14 +1,14 @@
 <?php
 
+
+use dokuwiki\plugin\qc\Output;
+
 /**
  * DokuWiki Plugin qc (Action Component)
  *
  * @license GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @author  Andreas Gohr <gohr@cosmocode.de>
  */
-
-use dokuwiki\plugin\qc\Output;
-
 class action_plugin_qc_ajax extends DokuWiki_Action_Plugin
 {
 

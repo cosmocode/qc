@@ -123,7 +123,7 @@ class renderer_plugin_qc extends Doku_Renderer
 
         // 1/2 points for deeply nested quotations
         if ($this->docArray['quote_nest'] > 2) {
-            $this->docArray['err']['deepquote'] += $this->docArray['quote_nest'] / 2;
+            $this->docArray['err']['deepquote'] = $this->docArray['quote_nest'] / 2;
         }
 
         // FIXME points for many quotes?

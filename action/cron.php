@@ -1,13 +1,16 @@
 <?php
 
+use dokuwiki\Extension\ActionPlugin;
+use dokuwiki\Extension\EventHandler;
+use dokuwiki\Extension\Event;
+
 /**
  * QC Cronjob Action Plugin: Clean up the history once per day
  *
  * @author Dominik Eckelmann <dokuwiki@cosmocode.de>
  */
-class action_plugin_qc_cron extends DokuWiki_Action_Plugin
+class action_plugin_qc_cron extends ActionPlugin
 {
-
     /**
      * if true a cleanup process is already running
      * or done in the last 24h
@@ -33,9 +36,9 @@ class action_plugin_qc_cron extends DokuWiki_Action_Plugin
      *
      * we need hook the indexer to trigger the cleanup
      */
-    public function register(Doku_Event_Handler $controller)
+    public function register(EventHandler $controller)
     {
-        $controller->register_hook('INDEXER_TASKS_RUN', 'BEFORE', $this, 'qccron', array());
+        $controller->register_hook('INDEXER_TASKS_RUN', 'BEFORE', $this, 'qccron', []);
     }
 
     /**
@@ -43,7 +46,7 @@ class action_plugin_qc_cron extends DokuWiki_Action_Plugin
      *
      * Scan for fixmes
      */
-    public function qccron(Doku_Event $event, $param)
+    public function qccron(Event $event, $param)
     {
         if ($this->run) return;
 
@@ -67,7 +70,7 @@ class action_plugin_qc_cron extends DokuWiki_Action_Plugin
 
         // when there are no quality problems we won't need the information
         if (!is_array($fixme) || $this->isOk($fixme['err'])) {
-            if(isset($persist[$ID])) unset($persist[$ID]);
+            if (isset($persist[$ID])) unset($persist[$ID]);
         } else {
             $persist[$ID] = $fixme;
         }

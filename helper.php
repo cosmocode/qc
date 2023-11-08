@@ -1,11 +1,12 @@
 <?php
 
+use dokuwiki\Extension\Plugin;
+
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  */
-class helper_plugin_qc extends DokuWiki_Plugin
+class helper_plugin_qc extends Plugin
 {
-
     /**
      * Output the standard quality header. Needs to be called formt he template
      */

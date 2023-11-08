@@ -11,8 +11,7 @@ namespace dokuwiki\plugin\qc;
  */
 class Output
 {
-
-    const MAXERR = 10; //what score to use as total failure
+    public const MAXERR = 10; //what score to use as total failure
 
     /** @var array the scoring data */
     protected $data;
@@ -88,7 +87,7 @@ class Output
         $html .= '<dd>' . dformat($this->data['modified']) . '</dd>';
 
         // print top 5 authors
-        if (!is_array($this->data['authors'])) $this->data['authors'] = array();
+        if (!is_array($this->data['authors'])) $this->data['authors'] = [];
         arsort($this->data['authors']);
         $top5 = array_slice($this->data['authors'], 0, 5);
         $cnt = count($top5);

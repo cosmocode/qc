@@ -70,8 +70,12 @@ class admin_plugin_qc extends AdminPlugin
         echo '<table class="inline">';
         echo '  <tr>';
         echo '    <th>' . $this->getLang('admin_page') . '</th>';
-        echo '    <th class="quality">' . $this->getOrderArrow('quality') . '<a href="' . wl($ID, ['do' => 'admin', 'page' => 'qc', 'pluginqc[order]' => 'quality']) . '">' . $this->getLang('admin_quality') . '</a></th>';
-        echo '    <th class="fixme">' . $this->getOrderArrow('fixme') . '<a href="' . wl($ID, ['do' => 'admin', 'page' => 'qc', 'pluginqc[order]' => 'fixme']) . '">' . $this->getLang('admin_fixme') . '</a></th>';
+        echo '    <th class="quality">' . $this->getOrderArrow('quality') .
+            '<a href="' . wl($ID, ['do' => 'admin', 'page' => 'qc', 'pluginqc[order]' => 'quality']) . '">' .
+            $this->getLang('admin_quality') . '</a></th>';
+        echo '    <th class="fixme">' . $this->getOrderArrow('fixme') .
+            '<a href="' . wl($ID, ['do' => 'admin', 'page' => 'qc', 'pluginqc[order]' => 'fixme']) . '">' .
+            $this->getLang('admin_fixme') . '</a></th>';
         echo '  </tr>';
 
         if ($this->data) {

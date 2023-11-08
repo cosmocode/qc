@@ -1,10 +1,8 @@
 <?php
+// phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 
 use dokuwiki\ChangeLog\PageChangeLog;
 use dokuwiki\File\PageResolver;
-
-use function dokuwiki\Utf8\PhpString::strlen;
-
 use dokuwiki\Utf8\PhpString;
 
 /**
@@ -37,7 +35,16 @@ class renderer_plugin_qc extends Doku_Renderer
         'words' => 0,
         'score' => 0,
         // calculated error scores
-        'err' => ['fixme' => 0, 'noh1' => 0, 'manyh1' => 0, 'headernest' => 0, 'manyhr' => 0, 'manybr' => 0, 'longformat' => 0, 'multiformat' => 0],
+        'err' => [
+            'fixme' => 0,
+            'noh1' => 0,
+            'manyh1' => 0,
+            'headernest' => 0,
+            'manyhr' => 0,
+            'manybr' => 0,
+            'longformat' => 0,
+            'multiformat' => 0
+        ],
     ];
 
     protected $quotelevel = 0;
@@ -45,7 +52,7 @@ class renderer_plugin_qc extends Doku_Renderer
     protected $tableopen = false;
 
     /** @inheritdoc */
-    public function document_start() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+    public function document_start()
     {
         global $ID;
         $meta = p_get_metadata($ID);
@@ -83,7 +90,7 @@ class renderer_plugin_qc extends Doku_Renderer
      * Here the score is calculated
      * @inheritdoc
      */
-    public function document_end() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+    public function document_end()
     {
         global $ID;
 
@@ -245,13 +252,13 @@ class renderer_plugin_qc extends Doku_Renderer
     }
 
     /** @inheritdoc */
-    public function table_open($maxcols = null, $numrows = null, $pos = null) // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+    public function table_open($maxcols = null, $numrows = null, $pos = null)
     {
         $this->tableopen = true;
     }
 
     /** @inheritdoc */
-    public function table_close($pos = null) // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+    public function table_close($pos = null)
     {
         $this->tableopen = false;
     }
@@ -263,7 +270,7 @@ class renderer_plugin_qc extends Doku_Renderer
     }
 
     /** @inheritdoc */
-    public function quote_open() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+    public function quote_open()
     {
         $this->docArray['quote_count']++;
         $this->quotelevel++;
@@ -271,43 +278,43 @@ class renderer_plugin_qc extends Doku_Renderer
     }
 
     /** @inheritdoc */
-    public function quote_close() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+    public function quote_close()
     {
         $this->quotelevel--;
     }
 
     /** @inheritdoc */
-    public function strong_open() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+    public function strong_open()
     {
         $this->formatting++;
     }
 
     /** @inheritdoc */
-    public function strong_close() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+    public function strong_close()
     {
         $this->formatting--;
     }
 
     /** @inheritdoc */
-    public function emphasis_open() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+    public function emphasis_open()
     {
         $this->formatting++;
     }
 
     /** @inheritdoc */
-    public function emphasis_close() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+    public function emphasis_close()
     {
         $this->formatting--;
     }
 
     /** @inheritdoc */
-    public function underline_open() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+    public function underline_open()
     {
         $this->formatting++;
     }
 
     /** @inheritdoc */
-    public function underline_close() // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+    public function underline_close()
     {
         $this->formatting--;
     }

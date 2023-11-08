@@ -1,5 +1,10 @@
 <?php
 
+use dokuwiki\ChangeLog\PageChangeLog;
+use dokuwiki\File\PageResolver;
+
+use function dokuwiki\Utf8\PhpString::strlen;
+
 use dokuwiki\Utf8\PhpString;
 
 /**
@@ -10,44 +15,30 @@ class renderer_plugin_qc extends Doku_Renderer
     /**
      * We store all our data in an array
      */
-    public $docArray = array(
+    public $docArray = [
         // raw statistics
-        'header_count' => array(0, 0, 0, 0, 0, 0),
-        'header_struct' => array(),
+        'header_count' => [0, 0, 0, 0, 0, 0],
+        'header_struct' => [],
         'linebreak' => 0,
         'quote_nest' => 0,
         'quote_count' => 0,
         'fixme' => 0,
         'hr' => 0,
         'formatted' => 0,
-
         'created' => 0,
         'modified' => 0,
         'changes' => 0,
-        'authors' => array(),
-
+        'authors' => [],
         'internal_links' => 0,
         'broken_links' => 0,
         'external_links' => 0,
-        'link_lengths' => array(),
-
+        'link_lengths' => [],
         'chars' => 0,
         'words' => 0,
-
         'score' => 0,
-
         // calculated error scores
-        'err' => array(
-            'fixme' => 0,
-            'noh1' => 0,
-            'manyh1' => 0,
-            'headernest' => 0,
-            'manyhr' => 0,
-            'manybr' => 0,
-            'longformat' => 0,
-            'multiformat' => 0,
-        ),
-    );
+        'err' => ['fixme' => 0, 'noh1' => 0, 'manyh1' => 0, 'headernest' => 0, 'manyhr' => 0, 'manybr' => 0, 'longformat' => 0, 'multiformat' => 0],
+    ];
 
     protected $quotelevel = 0;
     protected $formatting = 0;
@@ -65,25 +56,25 @@ class renderer_plugin_qc extends Doku_Renderer
         $this->docArray['authors']['*'] = 0;
 
         // get author info
-        $changelog = new \dokuwiki\ChangeLog\PageChangeLog($ID);
+        $changelog = new PageChangeLog($ID);
         $revs = $changelog->getRevisions(0, 10000); //FIXME find a good solution for 'get ALL revisions'
         $revs[] = $meta['last_change']['date'];
         $this->docArray['changes'] = count($revs);
         foreach ($revs as $rev) {
             $info = $changelog->getRevisionInfo($rev);
             if ($info && !empty($info['user'])) {
-                $authorUserCnt = !empty($this->docArray['authors'][$info['user']])
-                    ? $this->docArray['authors'][$info['user']]
-                    : 0;
+                $authorUserCnt = empty($this->docArray['authors'][$info['user']])
+                    ? 0
+                    : $this->docArray['authors'][$info['user']];
                 $this->docArray['authors'][$info['user']] = $authorUserCnt + 1;
             } else {
-                $this->docArray['authors']['*'] += 1;
+                ++$this->docArray['authors']['*'];
             }
         }
 
         // work on raw text
         $text = rawWiki($ID);
-        $this->docArray['chars'] = utf8_strlen($text);
+        $this->docArray['chars'] = PhpString::strlen($text);
         $this->docArray['words'] = count(array_filter(preg_split('/[^\w\-_]/u', $text)));
     }
 
@@ -97,7 +88,7 @@ class renderer_plugin_qc extends Doku_Renderer
         global $ID;
 
         // 2 points for missing backlinks
-        if (!count(ft_backlinks($ID))) {
+        if (ft_backlinks($ID) === []) {
             $this->docArray['err']['nobacklink'] += 2;
         }
 
@@ -117,7 +108,7 @@ class renderer_plugin_qc extends Doku_Renderer
         $cnt = count($this->docArray['header_struct']);
         for ($i = 1; $i < $cnt; $i++) {
             if ($this->docArray['header_struct'][$i] - $this->docArray['header_struct'][$i - 1] > 1) {
-                $this->docArray['err']['headernest'] += 1;
+                ++$this->docArray['err']['headernest'];
             }
         }
 
@@ -190,7 +181,7 @@ class renderer_plugin_qc extends Doku_Renderer
         }
 
         // add up all scores
-        foreach ($this->docArray['err'] as $err => $val) $this->docArray['score'] += $val;
+        foreach ($this->docArray['err'] as $val) $this->docArray['score'] += $val;
 
 
         //we're done here
@@ -208,14 +199,14 @@ class renderer_plugin_qc extends Doku_Renderer
     {
         global $ID;
 
-        $resolver = new \dokuwiki\File\PageResolver($ID);
+        $resolver = new PageResolver($ID);
         $id = $resolver->resolveId($id);
         $exists = page_exists($id);
 
         // calculate link width
         $a = explode(':', getNS($ID));
         $b = explode(':', getNS($id));
-        while (isset($a[0]) && $a[0] == $b[0]) {
+        while (isset($a[0]) && $a[0] === $b[0]) {
             array_shift($a);
             array_shift($b);
         }

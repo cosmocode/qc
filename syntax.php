@@ -1,14 +1,15 @@
 <?php
 
+use dokuwiki\Extension\SyntaxPlugin;
+
 /**
  * DokuWiki Plugin qc (Syntax Component)
  *
  * @license GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @author  Andreas Gohr <gohr@cosmocode.de>
  */
-class syntax_plugin_qc extends DokuWiki_Syntax_Plugin
+class syntax_plugin_qc extends SyntaxPlugin
 {
-
     /** @inheritdoc */
     public function getType()
     {

@@ -66,8 +66,8 @@ class action_plugin_qc_cron extends DokuWiki_Action_Plugin
         $fixme = $qc->getQCData($ID);
 
         // when there are no quality problems we won't need the information
-        if ($this->isOk($fixme['err'])) {
-            unset($persist[$ID]);
+        if (!is_array($fixme) || $this->isOk($fixme['err'])) {
+            if(isset($persist[$ID])) unset($persist[$ID]);
         } else {
             $persist[$ID] = $fixme;
         }

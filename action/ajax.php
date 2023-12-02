@@ -16,7 +16,7 @@ class action_plugin_qc_ajax extends ActionPlugin
     /**
      * Registers a callback function for a given event
      *
-     * @param Doku_Event_Handler $controller DokuWiki's event controller object
+     * @param EventHandler $controller DokuWiki's event controller object
      * @return void
      */
     public function register(EventHandler $controller)
@@ -27,7 +27,7 @@ class action_plugin_qc_ajax extends ActionPlugin
     /**
      * Out put the wanted HTML
      *
-     * @param Doku_Event $event
+     * @param Event $event
      * @param $param
      */
     public function ajax(Event $event, $param)

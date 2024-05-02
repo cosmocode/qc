@@ -77,10 +77,15 @@ class admin_plugin_qc extends AdminPlugin
             '<a href="' . wl($ID, ['do' => 'admin', 'page' => 'qc', 'pluginqc[order]' => 'fixme']) . '">' .
             $this->getLang('admin_fixme') . '</a></th>';
         echo '  </tr>';
-
+        
+        $skip = $this->getConf('ignore_sidebar');
+        
         if ($this->data) {
             foreach ($this->data as $id => $data) {
                 if ($max == 0) break;
+                if ($skip && str_ends_with($id, 'sidebar')) {
+                    continue;  // skips 'sidebar' special pages
+                }
                 echo '  <tr>';
                 echo '    <td>';
                 tpl_pagelink(':' . $id, $id);

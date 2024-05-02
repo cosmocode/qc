@@ -6,3 +6,4 @@ $lang['single_author_only'] = 'There is only one or a few authors.';
 $lang['ignore_nobacklink'] = 'Ignore the scoring of missing backlinks. This might be applicable when the Alternative Breadcrumbs feature is providing a backlink each for all pages e.g., by the sprintdoc template'
 $lang['ignore_header_count'] = 'Ignore the scoring of more than one H1 header.'
 $lang['ignore_todo-list'] = 'Ignore pages specifically marked with the "~~TODOLIST~~" macro for use with the ToDo plugin.'
+$lang['ignore_sidebar'] = 'Ignore "sidebar" special page names.'

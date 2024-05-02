@@ -32,6 +32,10 @@ class syntax_plugin_qc extends SyntaxPlugin
     public function connectTo($mode)
     {
         $this->Lexer->addSpecialPattern('~~NOQC~~', $mode, 'plugin_qc');
+        
+        if ($this->getConf('ignore_todo-list') {
+            $this->Lexer->addSpecialPattern('~~TODOLIST~~', $mode, 'plugin_qc');
+        }
     }
 
     /** @inheritdoc */

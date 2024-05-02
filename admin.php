@@ -78,7 +78,7 @@ class admin_plugin_qc extends AdminPlugin
             $this->getLang('admin_fixme') . '</a></th>';
         echo '  </tr>';
         
-        $skip = $this->getConf('ignore_sidebar');
+        $skip = $this->getConf('skip_sidebar');
         
         if ($this->data) {
             foreach ($this->data as $id => $data) {

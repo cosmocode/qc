@@ -96,7 +96,7 @@ class renderer_plugin_qc extends Doku_Renderer
         global $ID;
 
         // 2 points for missing backlinks
-        if (ft_backlinks($ID) === []) {
+        if (!$this->getConf('ignore_nobacklink') && ft_backlinks($ID) === []) {
             $this->docArray['err']['nobacklink'] += 2;
         }
 
@@ -107,9 +107,10 @@ class renderer_plugin_qc extends Doku_Renderer
         if ($this->docArray['header_count'][1] == 0) {
             $this->docArray['err']['noh1'] += 5;
         }
+        
         // 1 point for each H1 too much
         if ($this->docArray['header_count'][1] > 1) {
-            $this->docArray['err']['manyh1'] += $this->docArray['header'][1];
+            $this->docArray['err']['manyh1'] += $this->docArray['header_count'][1];
         }
 
         // 1 point for each incorrectly nested headline
@@ -125,7 +126,7 @@ class renderer_plugin_qc extends Doku_Renderer
             $this->docArray['err']['deepquote'] = $this->docArray['quote_nest'] / 2;
         }
 
-        // FIXME points for many quotes?
+        // FIXME points for too many quotes?
 
         // 1/2 points for too many hr
         if ($this->docArray['hr'] > 2) {

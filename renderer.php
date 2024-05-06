@@ -109,7 +109,7 @@ class renderer_plugin_qc extends Doku_Renderer
         }
         // 1 point for each H1 too much
         if ($this->docArray['header_count'][1] > 1) {
-            $this->docArray['err']['manyh1'] += $this->docArray['header'][1];
+            $this->docArray['err']['manyh1'] += $this->docArray['header_count'][1];
         }
 
         // 1 point for each incorrectly nested headline

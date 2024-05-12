@@ -95,7 +95,7 @@ class renderer_plugin_qc extends Doku_Renderer
     {
         global $ID;
 
-        // 2 points for missing backlinks
+        // 2 points for missing i.e. no backlinks
         if (ft_backlinks($ID) === []) {
             $this->docArray['err']['nobacklink'] += 2;
         }
@@ -107,6 +107,7 @@ class renderer_plugin_qc extends Doku_Renderer
         if ($this->docArray['header_count'][1] == 0) {
             $this->docArray['err']['noh1'] += 5;
         }
+        
         // 1 point for each H1 too much
         if ($this->docArray['header_count'][1] > 1) {
             $this->docArray['err']['manyh1'] += $this->docArray['header_count'][1];
@@ -132,7 +133,7 @@ class renderer_plugin_qc extends Doku_Renderer
             $this->docArray['err']['manyhr'] = ($this->docArray['hr'] - 2) / 2;
         }
 
-        // 1 point for too many line breaks
+        // 1 point for too many forced line breaks
         if ($this->docArray['linebreak'] > 2) {
             $this->docArray['err']['manybr'] = $this->docArray['linebreak'] - 2;
         }

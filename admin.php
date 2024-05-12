@@ -78,9 +78,14 @@ class admin_plugin_qc extends AdminPlugin
             $this->getLang('admin_fixme') . '</a></th>';
         echo '  </tr>';
 
+        $skip = $this->getConf('skip_specials');
+
         if ($this->data) {
             foreach ($this->data as $id => $data) {
                 if ($max == 0) break;
+                if ($skip && ($id === 'sidebar' || str_ends_with($id, ':sidebar') || str_ends_with($id, '_template'))) {
+                    continue;  // skips 'sidebar' & '_template'. '__template', 'c_template', 'i_template' special pages
+                }
                 echo '  <tr>';
                 echo '    <td>';
                 tpl_pagelink(':' . $id, $id);

@@ -5,6 +5,7 @@
 use dokuwiki\ChangeLog\PageChangeLog;
 use dokuwiki\File\PageResolver;
 use dokuwiki\Utf8\PhpString;
+use dokuwiki\Search\MetadataSearch;
 
 /**
  * The Renderer
@@ -98,7 +99,7 @@ class renderer_plugin_qc extends Doku_Renderer
         global $ID;
 
         // 2 points for missing backlinks
-        if (ft_backlinks($ID) === []) {
+        if ((new MetadataSearch())->backlinks($ID) === []) {
             $this->docArray['err']['nobacklink'] += 2;
         }
 
